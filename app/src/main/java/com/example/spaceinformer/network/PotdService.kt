@@ -7,6 +7,6 @@ import retrofit2.http.Path
 
 interface PotdService {
 
-    @GET("?api_key=${Constants.API_KEY}")
+    @GET("apod?api_key=${Constants.API_KEY}")
     suspend fun getPotd():Potd
 }
