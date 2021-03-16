@@ -1,7 +1,8 @@
-package com.example.spaceinformer
+package com.example.spaceinformer.Potd
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.spaceinformer.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
