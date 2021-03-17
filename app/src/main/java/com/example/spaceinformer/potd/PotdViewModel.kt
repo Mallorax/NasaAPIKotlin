@@ -9,15 +9,15 @@ import com.example.spaceinformer.network.PotdService
 import com.example.spaceinformer.repository.PotdRepository
 import com.example.spaceinformer.repository.PotdRetrofitRepository
 import com.google.gson.GsonBuilder
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class PotdViewModel(): ViewModel() {
-
-    val repo: PotdRepository = PotdRetrofitRepository()
-
+@HiltViewModel
+class PotdViewModel @Inject constructor(private val repo: PotdRepository): ViewModel() {
 
     val potd: LiveData<Potd> = liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
         val data = repo.getPotd()

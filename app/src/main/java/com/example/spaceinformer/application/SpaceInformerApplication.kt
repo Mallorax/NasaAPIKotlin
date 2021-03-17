@@ -1,8 +1,9 @@
 package com.example.spaceinformer.application
 
 import android.app.Application
-import com.example.spaceinformer.dagger.DaggerApplicationComponent
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class SpaceInformerApplication: Application() {
-    val appComponent =  DaggerApplicationComponent.create()
+
 }
