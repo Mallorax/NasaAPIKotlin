@@ -5,7 +5,7 @@ import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.example.spaceinformer.model.Potd
+import com.example.spaceinformer.model.NasaAPI.Potd.Potd
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("potdTitle")
