@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 
 import com.example.spaceinformer.databinding.FragmentPotdBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +14,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PotdFragment: Fragment() {
 
-    private val viewModel: PotdViewModel by viewModels()
+
+    private val  viewModel: PotdViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
