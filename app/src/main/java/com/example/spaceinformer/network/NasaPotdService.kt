@@ -1,7 +1,7 @@
 package com.example.spaceinformer.network
 
 import com.example.spaceinformer.application.Constants
-import com.example.spaceinformer.model.NasaAPI.Potd.Potd
+import com.example.spaceinformer.model.NasaAPI.potd.Potd
 import retrofit2.http.GET
 
 interface NasaPotdService {

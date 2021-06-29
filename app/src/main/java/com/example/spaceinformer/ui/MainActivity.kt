@@ -1,4 +1,4 @@
-package com.example.spaceinformer.UI
+package com.example.spaceinformer.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

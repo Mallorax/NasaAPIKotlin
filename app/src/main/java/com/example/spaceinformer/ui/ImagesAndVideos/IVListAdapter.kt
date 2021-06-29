@@ -1,4 +1,4 @@
-package com.example.spaceinformer.UI.ImagesAndVideos
+package com.example.spaceinformer.ui.ImagesAndVideos
 
 import android.view.LayoutInflater
 import android.view.View

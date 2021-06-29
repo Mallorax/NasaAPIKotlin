@@ -1,16 +1,14 @@
-package com.example.spaceinformer.UI.ImagesAndVideos
+package com.example.spaceinformer.ui.ImagesAndVideos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.spaceinformer.model.NasaAPI.get.Collection
 import com.example.spaceinformer.model.NasaAPI.get.Item
 import com.example.spaceinformer.repository.IVRetrofitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class IVViewModel @Inject constructor(private val repo: IVRetrofitRepository): ViewModel() {

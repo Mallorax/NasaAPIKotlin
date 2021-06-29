@@ -1,11 +1,11 @@
-package com.example.spaceinformer.UI.potd
+package com.example.spaceinformer.ui.potd
 
 import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
 import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.example.spaceinformer.model.NasaAPI.Potd.Potd
+import com.example.spaceinformer.model.NasaAPI.potd.Potd
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("potdTitle")

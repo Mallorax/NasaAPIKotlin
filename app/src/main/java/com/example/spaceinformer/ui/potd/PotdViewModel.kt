@@ -1,10 +1,10 @@
-package com.example.spaceinformer.UI.potd
+package com.example.spaceinformer.ui.potd
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.spaceinformer.model.NasaAPI.Potd.Potd
+import com.example.spaceinformer.model.NasaAPI.potd.Potd
 import com.example.spaceinformer.repository.PotdRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

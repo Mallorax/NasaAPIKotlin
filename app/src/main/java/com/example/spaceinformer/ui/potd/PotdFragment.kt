@@ -1,4 +1,4 @@
-package com.example.spaceinformer.UI.potd
+package com.example.spaceinformer.ui.potd
 
 import android.os.Bundle
 import android.view.LayoutInflater

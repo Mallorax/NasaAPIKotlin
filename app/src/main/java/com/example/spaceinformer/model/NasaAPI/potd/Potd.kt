@@ -1,4 +1,4 @@
-package com.example.spaceinformer.model.NasaAPI.Potd
+package com.example.spaceinformer.model.NasaAPI.potd
 
 import com.google.gson.annotations.SerializedName
 
