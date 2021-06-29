@@ -1,8 +1,7 @@
 package com.example.spaceinformer.hilt
 
-import com.example.spaceinformer.network.GetEndpointService
-import com.example.spaceinformer.network.PotdService
-import com.example.spaceinformer.repository.PotdRetrofitRepository
+import com.example.spaceinformer.network.NasaIVEndpointService
+import com.example.spaceinformer.network.NasaPotdService
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -18,21 +17,21 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providePotdRetrofitEndpoint(): PotdService {
+    fun providePotdRetrofitEndpoint(): NasaPotdService {
         return Retrofit.Builder()
             .baseUrl("https://api.nasa.gov/planetary/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-            .create(PotdService::class.java)
+            .create(NasaPotdService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideNasaAPIGetEndpoint(): GetEndpointService {
+    fun provideNasaAPIIVEndpoint(): NasaIVEndpointService {
         return Retrofit.Builder()
             .baseUrl("https://images-api.nasa.gov/")
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
-            .create(GetEndpointService::class.java)
+            .create(NasaIVEndpointService::class.java)
     }
 }
