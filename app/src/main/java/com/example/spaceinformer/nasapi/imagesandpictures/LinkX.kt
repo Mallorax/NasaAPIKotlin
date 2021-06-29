@@ -1,4 +1,4 @@
-package com.example.spaceinformer.model.NasaAPI.get
+package com.example.spaceinformer.nasapi.imagesandpictures
 
 data class LinkX(
     val href: String,

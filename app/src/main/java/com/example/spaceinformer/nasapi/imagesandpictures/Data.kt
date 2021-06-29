@@ -1,4 +1,4 @@
-package com.example.spaceinformer.model.NasaAPI.get
+package com.example.spaceinformer.nasapi.imagesandpictures
 
 data class Data(
     val album: List<String>,

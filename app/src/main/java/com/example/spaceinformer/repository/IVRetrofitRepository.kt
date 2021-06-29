@@ -1,6 +1,6 @@
 package com.example.spaceinformer.repository
 
-import com.example.spaceinformer.model.NasaAPI.get.Item
+import com.example.spaceinformer.nasapi.imagesandpictures.Item
 import com.example.spaceinformer.network.NasaIVEndpointService
 import javax.inject.Inject
 

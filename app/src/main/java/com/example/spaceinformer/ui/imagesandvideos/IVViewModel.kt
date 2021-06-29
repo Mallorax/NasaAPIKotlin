@@ -1,10 +1,10 @@
-package com.example.spaceinformer.ui.ImagesAndVideos
+package com.example.spaceinformer.ui.imagesandvideos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.spaceinformer.model.NasaAPI.get.Item
+import com.example.spaceinformer.nasapi.imagesandpictures.Item
 import com.example.spaceinformer.repository.IVRetrofitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
