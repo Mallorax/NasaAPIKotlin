@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.R
+import com.example.spaceinformer.databinding.IvListItemBinding
+import com.example.spaceinformer.nasapi.imagesandpictures.Data
 
 import com.example.spaceinformer.nasapi.imagesandpictures.Item
 
@@ -25,22 +27,26 @@ class IVListAdapter(private val onClickListener: OnClickListener):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IvListViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.iv_list_item, parent, false)
-        return IvListViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = IvListItemBinding.inflate(inflater, parent, false)
+        return IvListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holderIvList: IvListViewHolder, position: Int) {
         val item = getItem(position)
-        holderIvList.textView.text = item.data[0].title
+        val data: Data = item.data[0]
         holderIvList.itemView.setOnClickListener{
             onClickListener.onClick(item, holderIvList.itemView)
         }
+        holderIvList.bind(data)
 
     }
 
-    class IvListViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val textView: TextView = view.findViewById(R.id.iv_list_item_title)
+    class IvListViewHolder(private var binding: IvListItemBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(data: Data){
+            binding.bindedData = data
+            binding.executePendingBindings()
+        }
     }
 
     class OnClickListener(val clickListener: (item: Item?, v: View) -> Unit){
