@@ -1,4 +1,4 @@
-package com.example.spaceinformer.potd
+package com.example.spaceinformer.UI.potd
 
 import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
 import android.os.Build

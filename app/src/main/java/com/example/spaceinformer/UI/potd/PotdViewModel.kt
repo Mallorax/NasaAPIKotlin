@@ -1,4 +1,4 @@
-package com.example.spaceinformer.potd
+package com.example.spaceinformer.UI.potd
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

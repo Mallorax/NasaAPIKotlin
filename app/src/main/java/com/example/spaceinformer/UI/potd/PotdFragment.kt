@@ -1,4 +1,4 @@
-package com.example.spaceinformer.potd
+package com.example.spaceinformer.UI.potd
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 
 import com.example.spaceinformer.databinding.FragmentPotdBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PotdFragment: Fragment() {
