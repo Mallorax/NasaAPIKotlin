@@ -1,11 +1,15 @@
 package com.example.spaceinformer.ui.potd
 
 import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+import android.media.browse.MediaBrowser
 import android.os.Build
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.spaceinformer.nasapi.potd.Potd
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("potdTitle")
@@ -23,5 +27,24 @@ fun bindPotdExplanation(textView: TextView, data: Potd?){
 
 @BindingAdapter("potdImage")
 fun bindPotdImage(imageView: ImageView, data: Potd?){
-    Picasso.get().load(data?.url).into(imageView)
+    if (data?.mediaType != "video") {
+        imageView.visibility = View.VISIBLE
+        Picasso.get().load(data?.url).into(imageView)
+    }else{
+        imageView.visibility = View.GONE
+    }
+}
+
+@BindingAdapter("potdVideo")
+fun bindPotdVideo(videoView: StyledPlayerView, data: Potd?){
+    if (data?.mediaType == "video") {
+        videoView.visibility = View.VISIBLE
+        val player = videoView.player
+        val mediaItem = MediaItem.fromUri(data.url)
+        player?.setMediaItem(mediaItem)
+        player?.prepare()
+        player?.play()
+    }else{
+        videoView.visibility = View.GONE
+    }
 }
