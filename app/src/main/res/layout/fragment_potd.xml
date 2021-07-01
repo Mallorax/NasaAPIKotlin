@@ -9,10 +9,15 @@
             name="potdViewModel"
             type="com.example.spaceinformer.ui.potd.PotdViewModel" />
     </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navigation"
         android:background="@drawable/space_bg_one">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,5 +95,17 @@
                 app:potdVideo="@{potdViewModel.potd}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+            android:id="@+id/bottom_navigation"
+            app:menu="@menu/bottom_nav_menu"/>
+
+    </RelativeLayout>
+
+
 </layout>
