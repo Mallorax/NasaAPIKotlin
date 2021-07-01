@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.spaceinformer.databinding.IvListFragmentBinding
 import com.example.spaceinformer.databinding.IvListFragmentBindingImpl
+import dagger.hilt.android.AndroidEntryPoint
 
 //Images & Videos
+@AndroidEntryPoint
 class IVListFragment : Fragment() {
 
     private val ivViewModel: IVViewModel by viewModels()
