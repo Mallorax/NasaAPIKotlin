@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.spaceinformer.databinding.IvListFragmentBinding
-import com.example.spaceinformer.databinding.IvListFragmentBindingImpl
 import dagger.hilt.android.AndroidEntryPoint
 
 //Images & Videos
@@ -28,8 +28,11 @@ class IVListFragment : Fragment() {
         var adapter = IVListAdapter(IVListAdapter.OnClickListener { _, _ ->
             Log.v("CLICK", "Item clicked:")
         })
-        adapter.submitList(ivViewModel.getIVsFromYear(2021).value)
-        return super.onCreateView(inflater, container, savedInstanceState)
+        ivViewModel.getIVsFromYear(2021).observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
+        binding.ivListRecycler.adapter = adapter
+        return binding.root
     }
 
 }
