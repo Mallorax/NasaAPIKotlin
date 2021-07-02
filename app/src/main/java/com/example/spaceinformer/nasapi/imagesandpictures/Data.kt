@@ -3,7 +3,7 @@ package com.example.spaceinformer.nasapi.imagesandpictures
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Datum {
+class Data {
     @SerializedName("description")
     @Expose
     var description: String? = null

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="bindedItem"
-            type="com.example.spaceinformer.nasapi.imagesandpictures.Item" />
+            type="com.example.spaceinformer.nasapi.imagesandpictures.IvItem" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

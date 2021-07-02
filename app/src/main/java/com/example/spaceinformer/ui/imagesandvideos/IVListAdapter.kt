@@ -7,19 +7,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.databinding.IvListItemBinding
-import com.example.spaceinformer.nasapi.imagesandpictures.Item
+import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 
 
 class IVListAdapter(private val onClickListener: OnClickListener):
-    ListAdapter<Item, IVListAdapter.IvListViewHolder>(DiffCallback) {
+    ListAdapter<IvItem, IVListAdapter.IvListViewHolder>(DiffCallback) {
 
-    companion object DiffCallback: DiffUtil.ItemCallback<Item>(){
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem === newItem
+    companion object DiffCallback: DiffUtil.ItemCallback<IvItem>(){
+        override fun areItemsTheSame(oldIvItem: IvItem, newIvItem: IvItem): Boolean {
+            return oldIvItem === newIvItem
         }
 
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.data?.get(0)?.nasaId == newItem.data?.get(0)?.nasaId
+        override fun areContentsTheSame(oldIvItem: IvItem, newIvItem: IvItem): Boolean {
+            return oldIvItem.data?.get(0)?.nasaId == newIvItem.data?.get(0)?.nasaId
         }
     }
 
@@ -39,14 +39,14 @@ class IVListAdapter(private val onClickListener: OnClickListener):
     }
 
     class IvListViewHolder(private var binding: IvListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Item){
-            binding.bindedItem = item
+        fun bind(ivItem: IvItem){
+            binding.bindedItem = ivItem
             binding.executePendingBindings()
         }
     }
 
-    class OnClickListener(val clickListener: (item: Item?, v: View) -> Unit){
-        fun onClick(item: Item?, view: View) = clickListener(item, view)
+    class OnClickListener(val clickListener: (ivItem: IvItem?, v: View) -> Unit){
+        fun onClick(ivItem: IvItem?, view: View) = clickListener(ivItem, view)
     }
 
 

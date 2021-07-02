@@ -3,7 +3,7 @@ package com.example.spaceinformer.nasapi.imagesandpictures
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Collection {
+class IvDataCollection {
     @SerializedName("metadata")
     @Expose
     var metadata: Metadata? = null
@@ -22,5 +22,5 @@ class Collection {
 
     @SerializedName("items")
     @Expose
-    var items: List<Item>? = null
+    var ivItems: List<IvItem>? = null
 }
