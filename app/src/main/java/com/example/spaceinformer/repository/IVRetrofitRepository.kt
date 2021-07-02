@@ -8,7 +8,7 @@ class IVRetrofitRepository @Inject constructor(private val retrofit: NasaIVEndpo
 
     override suspend fun getIVFromYear(year: Int): List<Item> {
         val yearString = year.toString()
-        return retrofit.getIVFromYear(yearString).items!! //TODO clean up
+        return retrofit.getIVFromYear(yearString).collection!!.items!! //TODO clean up
     }
 
 }
