@@ -3,15 +3,12 @@ package com.example.spaceinformer.ui.imagesandvideos
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListItemBinding
-import com.example.spaceinformer.nasapi.imagesandpictures.Data
+import com.example.spaceinformer.nasapi.tmp.Item
 
-import com.example.spaceinformer.nasapi.imagesandpictures.Item
 
 class IVListAdapter(private val onClickListener: OnClickListener):
     ListAdapter<Item, IVListAdapter.IvListViewHolder>(DiffCallback) {
@@ -22,7 +19,7 @@ class IVListAdapter(private val onClickListener: OnClickListener):
         }
 
         override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.data[0].nasa_id == newItem.data[0].nasa_id
+            return oldItem.data?.get(0)?.nasaId == newItem.data?.get(0)?.nasaId
         }
     }
 
@@ -34,17 +31,16 @@ class IVListAdapter(private val onClickListener: OnClickListener):
 
     override fun onBindViewHolder(holderIvList: IvListViewHolder, position: Int) {
         val item = getItem(position)
-        val data: Data = item.data[0]
         holderIvList.itemView.setOnClickListener{
             onClickListener.onClick(item, holderIvList.itemView)
         }
-        holderIvList.bind(data)
+        holderIvList.bind(item)
 
     }
 
     class IvListViewHolder(private var binding: IvListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data: Data){
-            binding.bindedData = data
+        fun bind(item: Item){
+            binding.bindedItem = item
             binding.executePendingBindings()
         }
     }

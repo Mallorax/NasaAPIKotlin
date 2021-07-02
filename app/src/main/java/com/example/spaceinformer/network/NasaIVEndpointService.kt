@@ -1,6 +1,6 @@
 package com.example.spaceinformer.network
 
-import com.example.spaceinformer.nasapi.imagesandpictures.Collection
+import com.example.spaceinformer.nasapi.tmp.Collection
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
