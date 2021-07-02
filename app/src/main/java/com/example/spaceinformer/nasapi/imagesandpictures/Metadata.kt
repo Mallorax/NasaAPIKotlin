@@ -1,5 +1,10 @@
 package com.example.spaceinformer.nasapi.imagesandpictures
 
-data class Metadata(
-    val total_hits: Int
-)
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+class Metadata {
+    @SerializedName("total_hits")
+    @Expose
+    var totalHits: Int? = null
+}

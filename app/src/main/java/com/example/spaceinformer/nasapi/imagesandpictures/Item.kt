@@ -1,7 +1,18 @@
 package com.example.spaceinformer.nasapi.imagesandpictures
 
-data class Item(
-    val `data`: List<Data>,
-    val href: String,
-    val links: List<Link>
-)
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+class Item {
+    @SerializedName("href")
+    @Expose
+    var href: String? = null
+
+    @SerializedName("data")
+    @Expose
+    var data: List<Datum>? = null
+
+    @SerializedName("links")
+    @Expose
+    var links: List<Link__1>? = null
+}

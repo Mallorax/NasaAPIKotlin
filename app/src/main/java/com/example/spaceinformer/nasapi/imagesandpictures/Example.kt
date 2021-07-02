@@ -1,4 +1,4 @@
-package com.example.spaceinformer.nasapi.tmp
+package com.example.spaceinformer.nasapi.imagesandpictures
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

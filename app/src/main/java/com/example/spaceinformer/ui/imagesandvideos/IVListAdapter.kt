@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.databinding.IvListItemBinding
-import com.example.spaceinformer.nasapi.tmp.Item
+import com.example.spaceinformer.nasapi.imagesandpictures.Item
 
 
 class IVListAdapter(private val onClickListener: OnClickListener):
     ListAdapter<Item, IVListAdapter.IvListViewHolder>(DiffCallback) {
 
     companion object DiffCallback: DiffUtil.ItemCallback<Item>(){
-        override fun areItemsTheSame(oldItem: Item, newItem: Item ): Boolean {
+        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
             return oldItem === newItem
         }
 
