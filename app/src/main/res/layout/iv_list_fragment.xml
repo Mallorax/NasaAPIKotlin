@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/iv_list_bottom_nav">
+        android:layout_above="@+id/bottom_navigation_view">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/iv_list_recycler"
@@ -36,8 +36,10 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
         <include
+            android:id="@+id/bottom_navigation_view"
             layout="@layout/pictures_bottom_nav"/>
     </RelativeLayout>
 </layout>
