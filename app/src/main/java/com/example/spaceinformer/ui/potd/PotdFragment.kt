@@ -33,20 +33,6 @@ class PotdFragment: Fragment() {
 
         val player = SimpleExoPlayer.Builder(requireContext()).build()
         baseBinding.videoPlayer.player = player
-        //navigation
-        val bottomNavBar: BottomNavigationView = baseBinding.bottomNavigationView.bottomNavigationView
-        val navController = this.findNavController()
-        bottomNavBar.setOnNavigationItemReselectedListener {
-            when(it.itemId){
-                R.id.bottom_nav_potd ->{
-
-                }
-                R.id.bottom_nav_iv_collection ->{
-                    navController.navigate(R.id.action_potdFragment_to_IVListFragment)
-                }
-            }
-        }
-        baseBinding.bottomNavigationView.bottomNavigationView.selectedItemId = R.id.bottom_nav_potd
         return baseBinding.root
     }
 }

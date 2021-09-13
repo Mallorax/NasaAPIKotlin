@@ -10,17 +10,17 @@
         android:name="com.example.spaceinformer.ui.potd.PotdFragment"
         android:label="Picture of the day"
         tools:layout="@layout/fragment_potd">
-        <action
-            android:id="@+id/action_potdFragment_to_IVListFragment"
-            app:destination="@id/IVListFragment" />
     </fragment>
     <fragment
         android:id="@+id/IVListFragment"
         android:name="com.example.spaceinformer.ui.imagesandvideos.IVListFragment"
-        android:label="IVListFragment" >
-        <action
-            android:id="@+id/action_IVListFragment_to_potdFragment"
-            app:destination="@id/potdFragment" />
+        android:label="Images and Videos" >
+    </fragment>
+    <fragment
+        android:id="@+id/favourites_fragment"
+        android:name="com.example.spaceinformer.ui.favourites.FavouritesFragment"
+        android:label="Favourites">
+
     </fragment>
 
 </navigation>
