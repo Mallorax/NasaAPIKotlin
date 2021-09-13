@@ -43,4 +43,6 @@ class Data {
     @SerializedName("location")
     @Expose
     var location: String? = null
+
+    var favourite: Boolean = false
 }

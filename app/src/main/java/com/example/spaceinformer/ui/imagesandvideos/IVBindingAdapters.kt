@@ -18,5 +18,5 @@ fun bindIvTitle(textView: TextView, ivItem: IvItem?){
 
 @BindingAdapter("ivThumbnail")
 fun bindIvThumbnail(imageView: ImageView, item: IvItem?){
-    Picasso.get().load(item?.imageLinks?.first()?.href).resize(240, 0).into(imageView) //TODO: Size is hardcoded and thus it is good only for mobile phones (too small for tablets)
+    Picasso.get().load(item?.imageLinks?.first()?.href).into(imageView) //TODO: Size is hardcoded and thus it is good only for mobile phones (too small for tablets)
 }
