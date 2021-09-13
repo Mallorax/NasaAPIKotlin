@@ -46,6 +46,7 @@ class PotdFragment: Fragment() {
                 }
             }
         }
+        baseBinding.bottomNavigationView.bottomNavigationView.selectedItemId = R.id.bottom_nav_potd
         return baseBinding.root
     }
 }
