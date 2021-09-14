@@ -1,4 +1,4 @@
-package com.example.spaceinformer.repository
+package com.example.spaceinformer.repository.potdrepo
 
 import com.example.spaceinformer.nasapi.potd.Potd
 

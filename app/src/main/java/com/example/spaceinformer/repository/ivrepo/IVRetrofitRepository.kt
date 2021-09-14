@@ -1,10 +1,11 @@
-package com.example.spaceinformer.repository
+package com.example.spaceinformer.repository.ivrepo
 
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.network.NasaIVEndpointService
 import javax.inject.Inject
 
-class IVRetrofitRepository @Inject constructor(private val retrofit: NasaIVEndpointService): IVRepository {
+class IVRetrofitRepository @Inject constructor(private val retrofit: NasaIVEndpointService):
+    IVRepository {
 
     //Returns images and videos from given year, but only 1 image from single nasa event
     override suspend fun getIVFromYearDistinct(year: Int): List<IvItem> {

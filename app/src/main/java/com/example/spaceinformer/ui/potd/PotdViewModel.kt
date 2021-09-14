@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.spaceinformer.nasapi.potd.Potd
-import com.example.spaceinformer.repository.PotdRepository
+import com.example.spaceinformer.repository.potdrepo.PotdRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

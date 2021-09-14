@@ -2,10 +2,10 @@ package com.example.spaceinformer.hilt
 
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.network.NasaPotdService
-import com.example.spaceinformer.repository.IVRepository
-import com.example.spaceinformer.repository.IVRetrofitRepository
-import com.example.spaceinformer.repository.PotdRepository
-import com.example.spaceinformer.repository.PotdRetrofitRepository
+import com.example.spaceinformer.repository.ivrepo.IVRepository
+import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
+import com.example.spaceinformer.repository.potdrepo.PotdRepository
+import com.example.spaceinformer.repository.potdrepo.PotdRetrofitRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,7 +22,7 @@ abstract class ViewModelModule {
 
      @Inject
      @ViewModelScoped
-     fun potdRetrofitRepository(retrofit: NasaPotdService): PotdRetrofitRepository{
+     fun potdRetrofitRepository(retrofit: NasaPotdService): PotdRetrofitRepository {
          return PotdRetrofitRepository(retrofit)
      }
 
@@ -31,7 +31,7 @@ abstract class ViewModelModule {
 
     @Inject
     @ViewModelScoped
-    fun ivRetrofitRepository(retrofit: NasaIVEndpointService): IVRetrofitRepository{
+    fun ivRetrofitRepository(retrofit: NasaIVEndpointService): IVRetrofitRepository {
         return IVRetrofitRepository(retrofit)
     }
 }

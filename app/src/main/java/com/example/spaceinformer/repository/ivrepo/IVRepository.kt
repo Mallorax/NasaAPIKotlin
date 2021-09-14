@@ -1,4 +1,4 @@
-package com.example.spaceinformer.repository
+package com.example.spaceinformer.repository.ivrepo
 
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 

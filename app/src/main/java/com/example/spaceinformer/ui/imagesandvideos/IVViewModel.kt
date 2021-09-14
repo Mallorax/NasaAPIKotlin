@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
-import com.example.spaceinformer.repository.IVRetrofitRepository
+import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

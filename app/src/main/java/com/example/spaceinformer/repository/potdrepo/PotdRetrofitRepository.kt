@@ -1,10 +1,11 @@
-package com.example.spaceinformer.repository
+package com.example.spaceinformer.repository.potdrepo
 
 import com.example.spaceinformer.nasapi.potd.Potd
 import com.example.spaceinformer.network.NasaPotdService
 import javax.inject.Inject
 
-class PotdRetrofitRepository @Inject constructor(private val retrofit: NasaPotdService): PotdRepository{
+class PotdRetrofitRepository @Inject constructor(private val retrofit: NasaPotdService):
+    PotdRepository {
 
     override suspend fun getPotd(): Potd = retrofit.getPotd()
 }
