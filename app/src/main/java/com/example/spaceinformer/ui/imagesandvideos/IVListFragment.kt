@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
@@ -22,29 +23,60 @@ class IVListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = IvListFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.ivViewModel = ivViewModel
-        var adapter = IVListAdapter(IVListAdapter.OnImageClickListener{i, v ->
-            Snackbar.make(requireContext(), v, "Item clicked: " + i?.data?.first()?.title, Snackbar.LENGTH_LONG).show()
-        }, IVListAdapter.OnFavouriteClickListener{item, view ->
-            if (item?.data?.first()?.favourite == false){
-                view.setImageResource(R.drawable.ic_baseline_favorite_24)
-                Snackbar.make(requireContext(), view, "Favorite: " + item?.data?.first()?.title, Snackbar.LENGTH_LONG).show()
-                item?.data?.first()?.favourite = true
-            }else{
-                view.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                Snackbar.make(requireContext(), view, "Not favorite: " + item?.data?.first()?.title, Snackbar.LENGTH_LONG).show()
-                item?.data?.first()?.favourite = false
-            }
-        })
+        val adapter = setUpRecyclerViewAdapter()
         ivViewModel.getIVsFromYear(2021).observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
         binding.ivListRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         binding.ivListRecycler.adapter = adapter
         return binding.root
+    }
+
+    private fun setUpRecyclerViewAdapter(): IVListAdapter {
+        return IVListAdapter(IVListAdapter.OnImageClickListener { item, view ->
+            val nasaID = item?.data?.first()?.nasaId
+            if (nasaID != null) {
+                Snackbar.make(
+                    requireContext(),
+                    view,
+                    "Navigation to details of: " + item.data?.first()?.title,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                val action = IVListFragmentDirections.actionIVListFragmentToDetailsFragment(nasaID)
+                view.findNavController().navigate(action)
+            } else {
+                Snackbar.make(
+                    requireContext(),
+                    view,
+                    "Id of an item not found: " + item?.data?.first()?.title,
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }, IVListAdapter.OnFavouriteClickListener { item, view ->
+            if (item?.data?.first()?.favourite == false) {
+                view.setImageResource(R.drawable.ic_baseline_favorite_24)
+                Snackbar.make(
+                    requireContext(),
+                    view,
+                    "Favorite: " + item.data?.first()?.title,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                item.data?.first()?.favourite = true
+            } else {
+                view.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                Snackbar.make(
+                    requireContext(),
+                    view,
+                    "Not favorite: " + item?.data?.first()?.title,
+                    Snackbar.LENGTH_LONG
+                ).show()
+                item?.data?.first()?.favourite = false
+            }
+        })
     }
 
 }

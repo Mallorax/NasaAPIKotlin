@@ -9,12 +9,19 @@
         android:id="@+id/potdFragment"
         android:name="com.example.spaceinformer.ui.potd.PotdFragment"
         android:label="Picture of the day"
-        tools:layout="@layout/fragment_potd">
-    </fragment>
+        tools:layout="@layout/fragment_potd"/>
     <fragment
         android:id="@+id/IVListFragment"
         android:name="com.example.spaceinformer.ui.imagesandvideos.IVListFragment"
-        android:label="Images and Videos" >
+        android:label="Images and Videos"
+        tools:layout="@layout/iv_list_fragment">
+        <action
+            android:id="@+id/action_IVListFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment">
+            <argument
+                android:name="nasaId"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/favourites_fragment"
@@ -22,5 +29,10 @@
         android:label="Favourites">
 
     </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.spaceinformer.ui.details.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/details_fragment" />
 
 </navigation>
