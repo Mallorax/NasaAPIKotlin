@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListItemBinding
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 
@@ -38,6 +39,9 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
         }
         holderIvList.binding.favouriteImage.setOnClickListener {
             onFavouriteClickListener.onClickFavourite(item, holderIvList.binding.favouriteImage)
+        }
+        if (item?.data?.first()?.favourite == true){
+            holderIvList.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
         holderIvList.bind(item)
 
