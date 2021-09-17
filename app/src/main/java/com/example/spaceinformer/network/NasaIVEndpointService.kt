@@ -8,4 +8,7 @@ interface NasaIVEndpointService {
 
     @GET("search")
     suspend fun getIVFromYear(@Query("year_start")year: String): IVResponsePojo
+
+    @GET("search")
+    suspend fun getIVWithId(@Query("nasa_id")nasaId: String): IVResponsePojo
 }

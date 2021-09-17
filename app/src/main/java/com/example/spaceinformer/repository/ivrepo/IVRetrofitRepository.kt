@@ -19,4 +19,9 @@ class IVRetrofitRepository @Inject constructor(private val retrofit: NasaIVEndpo
         return responseBody?.ivItems!!
     }
 
+    override suspend fun getIVWithNasaId(id: String): IvItem {
+        val responseBody = retrofit.getIVWithId(id).ivDataCollection
+        val result = responseBody?.ivItems?.first()
+        return result!!
+    }
 }
