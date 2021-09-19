@@ -37,7 +37,7 @@
                 tools:text="Test title" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/main_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -61,8 +61,20 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/main_image_view"
                 tools:text="@string/lorem_ipsum_long" />
+
+            <ImageView
+                android:id="@+id/favourite_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description_text"
+                tools:src="@drawable/ic_baseline_favorite_border_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -1,4 +1,4 @@
-package com.example.spaceinformer.room.Entities
+package com.example.spaceinformer.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,7 +9,7 @@ data class DataEntity(
 
     @PrimaryKey
     @ColumnInfo(name = "nasa_id")
-    var nasaId: String? = null,
+    var nasaId: String,
 
     var isFavourite: Boolean
 )

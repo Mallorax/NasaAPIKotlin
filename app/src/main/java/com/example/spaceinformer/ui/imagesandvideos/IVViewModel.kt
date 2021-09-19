@@ -4,20 +4,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.example.spaceinformer.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class IVViewModel @Inject constructor(private val repo: IVRetrofitRepository): ViewModel() {
+class IVViewModel
+@Inject constructor(private val retrofitRepo: IVRetrofitRepository,
+                    private val roomFavouritesRepo: FavouritesRepo): ViewModel() {
 
-    fun getIVsFromYear(year: Int): LiveData<List<IvItem>>{
-        val ivs: LiveData<List<IvItem>> = liveData (context = viewModelScope.coroutineContext + Dispatchers.IO){
-            val data = repo.getIVFromYearDistinct(year)
-            emit(data)
+    fun getIVsFromYear(year: Int): LiveData<List<IvItem>> {
+        return liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+            val data = retrofitRepo.getIVFromYearDistinct(year)
+            this.emit(data)
         }
-        return ivs
     }
+
+    fun saveFavourite(data: Data){
+        viewModelScope.launch(Dispatchers.IO){
+            roomFavouritesRepo.saveToFavourites(data)
+        }
+    }
+
 }

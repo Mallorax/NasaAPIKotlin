@@ -66,6 +66,7 @@ class IVListFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 item.data?.first()?.favourite = true
+                ivViewModel.saveFavourite(item.data!!.first())
             } else {
                 view.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 Snackbar.make(
@@ -75,6 +76,7 @@ class IVListFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 item?.data?.first()?.favourite = false
+                ivViewModel.saveFavourite(item?.data!!.first())
             }
         })
     }
