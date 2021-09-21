@@ -14,7 +14,9 @@ import com.squareup.picasso.Picasso
 
 @BindingAdapter("potdTitle")
 fun bindPotdTitle(textView: TextView, data: Potd?){
-    textView.text = data?.title
+    if (data != null){
+        textView.text = data.title
+    }
 }
 
 @BindingAdapter("potdExplanation")
@@ -22,29 +24,36 @@ fun bindPotdExplanation(textView: TextView, data: Potd?){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
         textView.justificationMode = JUSTIFICATION_MODE_INTER_WORD
     }
-    textView.text = data?.explanation
+    if (data != null){
+        textView.text = data.explanation
+    }
+
 }
 
 @BindingAdapter("potdImage")
 fun bindPotdImage(imageView: ImageView, data: Potd?){
-    if (data?.mediaType != "video") {
-        imageView.visibility = View.VISIBLE
-        Picasso.get().load(data?.url).into(imageView)
-    }else{
-        imageView.visibility = View.GONE
+    if (data != null) {
+        if (data.mediaType != "video") {
+            imageView.visibility = View.VISIBLE
+            Picasso.get().load(data?.url).into(imageView)
+        }else{
+            imageView.visibility = View.GONE
+        }
     }
 }
 
 @BindingAdapter("potdVideo")
 fun bindPotdVideo(videoView: StyledPlayerView, data: Potd?){
-    if (data?.mediaType == "video") {
-        videoView.visibility = View.VISIBLE
-        val player = videoView.player
-        val mediaItem = MediaItem.fromUri(data.url)
-        player?.setMediaItem(mediaItem)
-        player?.prepare()
-        player?.play()
-    }else{
-        videoView.visibility = View.GONE
+    if (data != null) {
+        if (data.mediaType == "video") {
+            videoView.visibility = View.VISIBLE
+            val player = videoView.player
+            val mediaItem = MediaItem.fromUri(data.url)
+            player?.setMediaItem(mediaItem)
+            player?.prepare()
+            player?.play()
+        }else{
+            videoView.visibility = View.GONE
+        }
     }
 }

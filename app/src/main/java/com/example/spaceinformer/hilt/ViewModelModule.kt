@@ -23,21 +23,22 @@ abstract class ViewModelModule {
     @Binds
      abstract fun potdRepository(repository: PotdRetrofitRepository): PotdRepository
 
-     @Inject
-     @ViewModelScoped
-     fun potdRetrofitRepository(retrofit: NasaPotdService): PotdRetrofitRepository {
-         return PotdRetrofitRepository(retrofit)
-     }
-
     @Binds
     abstract fun ivRepository(repository: IVRetrofitRepository): IVRepository
 
     @Binds
     abstract fun favouritesRepo(repo: FavouritesRepoImpl): FavouritesRepo
 
+     @Inject
+     @ViewModelScoped
+     fun potdRetrofitRepository(retrofit: NasaPotdService): PotdRepository {
+         return PotdRetrofitRepository(retrofit)
+     }
+
+
     @Inject
     @ViewModelScoped
-    fun ivRetrofitRepository(retrofit: NasaIVEndpointService): IVRetrofitRepository {
+    fun ivRetrofitRepository(retrofit: NasaIVEndpointService): IVRepository {
         return IVRetrofitRepository(retrofit)
     }
 
