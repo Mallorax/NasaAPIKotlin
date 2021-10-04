@@ -18,9 +18,9 @@ class IVViewModel
 @Inject constructor(private val retrofitRepo: IVRetrofitRepository,
                     private val roomFavouritesRepo: FavouritesRepo): ViewModel() {
 
-    fun getIVsFromYear(year: Int): LiveData<List<IvItem>> {
+    fun getIVsFromYear(year: Int, page: Int = 1): LiveData<List<IvItem>> {
         return liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
-            val data = retrofitRepo.getIVFromYearDistinct(year)
+            val data = retrofitRepo.getIVFromYearDistinct(year, page)
             this.emit(data)
         }
     }

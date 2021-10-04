@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
+import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class IVListFragment : Fragment() {
 
     private val ivViewModel: IVViewModel by viewModels()
+    private var page = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,13 +32,38 @@ class IVListFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.ivViewModel = ivViewModel
         val adapter = setUpRecyclerViewAdapter()
-        ivViewModel.getIVsFromYear(2021).observe(viewLifecycleOwner, {
-            adapter.submitList(it)
+        val recycler = binding.ivListRecycler
+        submitFirstPage(adapter)
+        recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        recycler.adapter = adapter
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)){
+                    page++
+                    changePage(page, adapter)
+                }
+            }
         })
-        binding.ivListRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        binding.ivListRecycler.adapter = adapter
         return binding.root
     }
+
+    private fun changePage(page: Int, adapter: IVListAdapter){
+        ivViewModel.getIVsFromYear(2021, page).observe(viewLifecycleOwner, {
+            val list = mutableListOf<IvItem>()
+            list.addAll(adapter.currentList)
+            list.addAll(it)
+            adapter.submitList(list)
+            adapter.notifyDataSetChanged()
+        })
+    }
+
+    private fun submitFirstPage(adapter: IVListAdapter){
+        ivViewModel.getIVsFromYear(2021, 1).observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
+    }
+
 
     private fun setUpRecyclerViewAdapter(): IVListAdapter {
         return IVListAdapter(IVListAdapter.OnImageClickListener { item, view ->
