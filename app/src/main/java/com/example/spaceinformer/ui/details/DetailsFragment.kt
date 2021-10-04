@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.DetailsFragmentBinding
+import com.example.spaceinformer.databinding.FragmentPotdBinding
 import com.example.spaceinformer.ui.imagesandvideos.IVListFragment
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,12 +21,15 @@ class DetailsFragment: Fragment() {
     private val viewModel: DetailsViewModel by viewModels()
     private val args: DetailsFragmentArgs by navArgs()
 
+    private var _binding: DetailsFragmentBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = DetailsFragmentBinding.inflate(inflater)
+        _binding = DetailsFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
         viewModel.getSpecificIV(args.nasaId).observe(this.viewLifecycleOwner, Observer { item ->
             val data = item.data?.first()
@@ -41,5 +45,10 @@ class DetailsFragment: Fragment() {
             }
         })
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

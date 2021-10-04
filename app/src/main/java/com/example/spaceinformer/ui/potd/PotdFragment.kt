@@ -21,7 +21,8 @@ class PotdFragment: Fragment() {
 
 
     private val  viewModel: PotdViewModel by viewModels()
-    private lateinit var baseBinding: FragmentPotdBinding
+    private var _baseBinding: FragmentPotdBinding? = null
+    private val baseBinding get() = _baseBinding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,12 +31,10 @@ class PotdFragment: Fragment() {
     ): View {
         setHasOptionsMenu(true)
         //bindings
-        baseBinding = FragmentPotdBinding.inflate(inflater)
+        _baseBinding = FragmentPotdBinding.inflate(inflater)
         baseBinding.lifecycleOwner = this
         baseBinding.potdViewModel = viewModel
 
-        val player = SimpleExoPlayer.Builder(requireContext()).build()
-        baseBinding.videoPlayer.player = player
         setUpObservers()
         return baseBinding.root
     }
@@ -56,5 +55,10 @@ class PotdFragment: Fragment() {
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
             Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG).show()
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _baseBinding = null
     }
 }
