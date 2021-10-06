@@ -1,0 +1,110 @@
+From daa6de3d1c81264a280167b59e4d85f812148e06 Mon Sep 17 00:00:00 2001
+From: DESKTOP-Mallorax <patryk733773@gmail.com>
+Date: Wed, 6 Oct 2021 14:11:16 +0200
+Subject: [PATCH] Finished changing IVListFragment along with how data
+ aquisition is handled in the background
+
+---
+ .../ui/imagesandvideos/IVListFragment.kt      | 27 +++++++++++++------
+ .../ui/imagesandvideos/IVViewModel.kt         |  6 +++--
+ app/src/main/res/layout/iv_list_fragment.xml  |  2 +-
+ 3 files changed, 24 insertions(+), 11 deletions(-)
+
+diff --git a/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVListFragment.kt b/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVListFragment.kt
+index f33fc37..439a0e1 100644
+--- a/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVListFragment.kt
++++ b/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVListFragment.kt
+@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
+ class IVListFragment : Fragment() {
+ 
+     private val ivViewModel: IVViewModel by viewModels()
+-    private var page = 0
++    private var page = 1
+     private var _binding: IvListFragmentBinding? = null
+     private val binding get() = _binding!!
+ 
+@@ -35,10 +35,17 @@ class IVListFragment : Fragment() {
+         _binding = IvListFragmentBinding.inflate(inflater)
+         binding.lifecycleOwner = this
+         binding.ivViewModel = ivViewModel
++
+         val adapter = setUpRecyclerViewAdapter()
+         val recycler = binding.ivListRecycler
++
+         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+-        setUpObservers(adapter)
++        adapter.submitList(mutableListOf<IvItem>())
++        ivViewModel.getIVs(2021, page)
++
++        showListOfData(adapter)
++        handleLoading()
++
+         recycler.adapter = adapter
+         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+@@ -52,9 +59,8 @@ class IVListFragment : Fragment() {
+         return binding.root
+     }
+ 
+-    private fun setUpObservers(adapter: IVListAdapter){
+-        adapter.submitList(mutableListOf<IvItem>())
+-        ivViewModel.ivs.observe(this.viewLifecycleOwner, Observer { response->
++    private fun showListOfData(adapter: IVListAdapter){
++        ivViewModel.ivs.observe(this.viewLifecycleOwner, { response ->
+             if (response.status == RepositoryResponse.Status.ERROR){
+                 Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG).show()
+             }else if (response.status == RepositoryResponse.Status.SUCCESS){
+@@ -65,12 +71,17 @@ class IVListFragment : Fragment() {
+                 adapter.notifyItemRangeInserted(adapter.itemCount + 1, response.data!!.size)
+             }
+         })
+-        //progress bar
+-        ivViewModel.loading.observe(this.viewLifecycleOwner, Observer {
+-            if (it){
++
++    }
++
++    private fun handleLoading(){
++        ivViewModel.loading.observe(this.viewLifecycleOwner, { isLoading ->
++            if (isLoading){
+                 binding.progressBar.visibility = View.VISIBLE
++                binding.ivListRecycler.visibility = View.GONE
+             }else{
+                 binding.progressBar.visibility = View.GONE
++                binding.ivListRecycler.visibility = View.VISIBLE
+             }
+         })
+     }
+diff --git a/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVViewModel.kt b/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVViewModel.kt
+index bcfd666..58bbb60 100644
+--- a/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVViewModel.kt
++++ b/app/src/main/java/com/example/spaceinformer/ui/imagesandvideos/IVViewModel.kt
+@@ -34,8 +34,10 @@ class IVViewModel
+             _loading.value = true
+             withContext(Dispatchers.IO) {
+                 val response = retrofitRepo.getIVFromYearDistinct(year, page)
+-                _ivs.postValue(response)
+-                _loading.value = false
++                withContext(Dispatchers.Main){
++                    _ivs.value = response
++                    _loading.value = false
++                }
+             }
+         }
+     }
+diff --git a/app/src/main/res/layout/iv_list_fragment.xml b/app/src/main/res/layout/iv_list_fragment.xml
+index 6f88cd7..d7e12b2 100644
+--- a/app/src/main/res/layout/iv_list_fragment.xml
++++ b/app/src/main/res/layout/iv_list_fragment.xml
+@@ -25,7 +25,7 @@
+             <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/iv_list_recycler"
+                 android:layout_width="match_parent"
+-                android:layout_height="0dp"
++                android:layout_height="wrap_content"
+                 android:layout_marginStart="8dp"
+                 android:layout_marginTop="8dp"
+                 android:layout_marginEnd="8dp"
+-- 
+2.29.2.windows.2
+
