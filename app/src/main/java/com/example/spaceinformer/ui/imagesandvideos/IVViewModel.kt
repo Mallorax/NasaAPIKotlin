@@ -34,8 +34,10 @@ class IVViewModel
             _loading.value = true
             withContext(Dispatchers.IO) {
                 val response = retrofitRepo.getIVFromYearDistinct(year, page)
-                _ivs.postValue(response)
-                _loading.value = false
+                withContext(Dispatchers.Main){
+                    _ivs.value = response
+                    _loading.value = false
+                }
             }
         }
     }

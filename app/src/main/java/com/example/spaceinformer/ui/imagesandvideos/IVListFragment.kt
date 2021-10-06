@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class IVListFragment : Fragment() {
 
     private val ivViewModel: IVViewModel by viewModels()
-    private var page = 0
+    private var page = 1
     private var _binding: IvListFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -35,10 +35,17 @@ class IVListFragment : Fragment() {
         _binding = IvListFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.ivViewModel = ivViewModel
+
         val adapter = setUpRecyclerViewAdapter()
         val recycler = binding.ivListRecycler
+
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        setUpObservers(adapter)
+        adapter.submitList(mutableListOf<IvItem>())
+        ivViewModel.getIVs(2021, page)
+
+        showListOfData(adapter)
+        handleLoading()
+
         recycler.adapter = adapter
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -52,9 +59,8 @@ class IVListFragment : Fragment() {
         return binding.root
     }
 
-    private fun setUpObservers(adapter: IVListAdapter){
-        adapter.submitList(mutableListOf<IvItem>())
-        ivViewModel.ivs.observe(this.viewLifecycleOwner, Observer { response->
+    private fun showListOfData(adapter: IVListAdapter){
+        ivViewModel.ivs.observe(this.viewLifecycleOwner, { response ->
             if (response.status == RepositoryResponse.Status.ERROR){
                 Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG).show()
             }else if (response.status == RepositoryResponse.Status.SUCCESS){
@@ -65,12 +71,17 @@ class IVListFragment : Fragment() {
                 adapter.notifyItemRangeInserted(adapter.itemCount + 1, response.data!!.size)
             }
         })
-        //progress bar
-        ivViewModel.loading.observe(this.viewLifecycleOwner, Observer {
-            if (it){
+
+    }
+
+    private fun handleLoading(){
+        ivViewModel.loading.observe(this.viewLifecycleOwner, { isLoading ->
+            if (isLoading){
                 binding.progressBar.visibility = View.VISIBLE
+                binding.ivListRecycler.visibility = View.GONE
             }else{
                 binding.progressBar.visibility = View.GONE
+                binding.ivListRecycler.visibility = View.VISIBLE
             }
         })
     }
