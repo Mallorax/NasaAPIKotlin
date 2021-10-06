@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ class DetailsViewModel
     //TODO: For now its questionable if this viewmodel is needed
     // or if other one could be reused for details fragment, reevaluate this later in the project
 
-    fun getSpecificIV(nasaId: String): LiveData<IvItem> {
+    fun getSpecificIV(nasaId: String): LiveData<RepositoryResponse<IvItem>> {
         return liveData(context = viewModelScope.coroutineContext + Dispatchers.Default) {
             val data = repo.getIVWithNasaId(nasaId)
             this.emit(data)

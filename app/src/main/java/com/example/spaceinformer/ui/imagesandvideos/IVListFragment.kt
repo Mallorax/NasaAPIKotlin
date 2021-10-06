@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.repository.RepositoryResponse
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,46 +23,55 @@ import dagger.hilt.android.AndroidEntryPoint
 class IVListFragment : Fragment() {
 
     private val ivViewModel: IVViewModel by viewModels()
-    private var page = 1
+    private var page = 0
+    private var _binding: IvListFragmentBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = IvListFragmentBinding.inflate(inflater)
+        _binding = IvListFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.ivViewModel = ivViewModel
         val adapter = setUpRecyclerViewAdapter()
         val recycler = binding.ivListRecycler
-        submitFirstPage(adapter)
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        setUpObservers(adapter)
         recycler.adapter = adapter
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)){
                     page++
-                    changePage(page, adapter)
+                    ivViewModel.getIVs(2021, page)
                 }
             }
         })
         return binding.root
     }
 
-    private fun changePage(page: Int, adapter: IVListAdapter){
-        ivViewModel.getIVsFromYear(2021, page).observe(viewLifecycleOwner, {
-            val list = mutableListOf<IvItem>()
-            list.addAll(adapter.currentList)
-            list.addAll(it)
-            adapter.submitList(list)
-            adapter.notifyDataSetChanged()
+    private fun setUpObservers(adapter: IVListAdapter){
+        adapter.submitList(mutableListOf<IvItem>())
+        ivViewModel.ivs.observe(this.viewLifecycleOwner, Observer { response->
+            if (response.status == RepositoryResponse.Status.ERROR){
+                Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG).show()
+            }else if (response.status == RepositoryResponse.Status.SUCCESS){
+                val list = mutableListOf<IvItem>()
+                list.addAll(adapter.currentList)
+                list.addAll(response.data!!)
+                adapter.submitList(list)
+                adapter.notifyItemRangeInserted(adapter.itemCount + 1, response.data!!.size)
+            }
         })
-    }
-
-    private fun submitFirstPage(adapter: IVListAdapter){
-        ivViewModel.getIVsFromYear(2021, 1).observe(viewLifecycleOwner, {
-            adapter.submitList(it)
+        //progress bar
+        ivViewModel.loading.observe(this.viewLifecycleOwner, Observer {
+            if (it){
+                binding.progressBar.visibility = View.VISIBLE
+            }else{
+                binding.progressBar.visibility = View.GONE
+            }
         })
     }
 
