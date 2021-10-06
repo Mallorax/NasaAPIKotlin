@@ -1,6 +1,6 @@
 package com.example.spaceinformer.repository
 
-data class RepositoryResponse <out T>(val status: Status, val data: T?, val message: String?) {
+data class RepositoryResponse <T>(var status: Status, var data: T?, val message: String?) {
 
     enum class Status{
         SUCCESS,
