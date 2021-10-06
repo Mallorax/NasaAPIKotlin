@@ -32,10 +32,10 @@ class DetailsFragment: Fragment() {
         _binding = DetailsFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
         viewModel.getSpecificIV(args.nasaId).observe(this.viewLifecycleOwner, Observer { item ->
-            val data = item.data?.first()
+            val data = item.data?.data?.first()
             binding.descriptionText.text = data?.description
             binding.titleText.text = data?.title
-            Picasso.get().load(item.imageLinks?.first()?.href).into(binding.mainImageView)
+            Picasso.get().load(item.data?.imageLinks?.first()?.href).into(binding.mainImageView)
         })
         viewModel.isCurrentDataFavourite(args.nasaId).observe(this.viewLifecycleOwner, Observer { isFavourite ->
             if (isFavourite){
