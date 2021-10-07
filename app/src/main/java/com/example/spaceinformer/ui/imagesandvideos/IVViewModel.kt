@@ -42,38 +42,11 @@ class IVViewModel
         }
     }
 
-    fun getIVsFromYear(year: Int, page: Int = 1): LiveData<RepositoryResponse<List<IvItem>>> {
-        return liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
-            val data = retrofitRepo.getIVFromYearDistinct(year, page)
-            this.emit(data)
-        }
-    }
-
     fun saveFavourite(data: Data) {
         viewModelScope.launch(Dispatchers.IO) {
             roomFavouritesRepo.saveToFavourites(data)
         }
     }
 
-    private fun attachPage(
-        page1: LiveData<RepositoryResponse<List<IvItem>>>,
-        page2: LiveData<RepositoryResponse<List<IvItem>>>
-    ): RepositoryResponse<List<IvItem>> {
-        val firstPage = page1.value
-        val secondPage = page2.value
-        if (firstPage == null || secondPage == null) {
-            return RepositoryResponse.loading(null)
-        }
-        if (firstPage.status == RepositoryResponse.Status.ERROR ||
-            secondPage.status == RepositoryResponse.Status.ERROR
-        ) {
-            return RepositoryResponse.error(firstPage.message + " " + secondPage.message)
-        }
-        val mergedList = mutableListOf<IvItem>()
-        mergedList.addAll(firstPage.data!!)
-        mergedList.addAll(secondPage.data!!)
-        return RepositoryResponse.success(mergedList)
-
-    }
 
 }
