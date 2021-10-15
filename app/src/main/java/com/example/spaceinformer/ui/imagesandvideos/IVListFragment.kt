@@ -23,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class IVListFragment : Fragment() {
 
     private val ivViewModel: IVViewModel by viewModels()
-    private var page = 1
     private var _binding: IvListFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -40,19 +39,18 @@ class IVListFragment : Fragment() {
         val recycler = binding.ivListRecycler
 
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        adapter.submitList(mutableListOf<IvItem>())
-        ivViewModel.getIVs(2021, page)
+        ivViewModel.getIVs(2021)
 
         showListOfData(adapter)
         handleLoading()
+        showError()
 
         recycler.adapter = adapter
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)){
-                    page++
-                    ivViewModel.getIVs(2021, page)
+                    ivViewModel.getIVs(2021)
                 }
             }
         })
@@ -60,18 +58,17 @@ class IVListFragment : Fragment() {
     }
 
     private fun showListOfData(adapter: IVListAdapter){
-        ivViewModel.ivs.observe(this.viewLifecycleOwner, { response ->
-            if (response.status == RepositoryResponse.Status.ERROR){
-                Snackbar.make(requireView(), response.message!!, Snackbar.LENGTH_LONG).show()
-            }else if (response.status == RepositoryResponse.Status.SUCCESS){
-                val list = mutableListOf<IvItem>()
-                list.addAll(adapter.currentList)
-                list.addAll(response.data!!)
-                adapter.submitList(list)
-                adapter.notifyItemRangeInserted(adapter.itemCount + 1, response.data!!.size)
+        ivViewModel.ivs.observe(this.viewLifecycleOwner, { items ->
+            adapter.submitList(items)
+        })
+    }
+
+    private fun showError(){
+        ivViewModel.itemsLoadingError.observe(this.viewLifecycleOwner, {
+            if (it){
+                Snackbar.make(this.requireView(), "Error occurred", Snackbar.LENGTH_LONG).show()
             }
         })
-
     }
 
     private fun handleLoading(){

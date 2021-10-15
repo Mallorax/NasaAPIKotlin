@@ -19,23 +19,41 @@ class IVViewModel
     private val roomFavouritesRepo: FavouritesRepo
 ) : ViewModel() {
 
-    //TODO: List for recyclerView doesn't retain data, It'd be good idea to move it here
-    val mediatorLiveData = MediatorLiveData<RepositoryResponse<List<IvItem>>>()
+    //TODO: Add more transparency to errors
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-    private val _ivs = MutableLiveData<RepositoryResponse<List<IvItem>>>()
-    val ivs: LiveData<RepositoryResponse<List<IvItem>>> get() = _ivs
+    private val _ivs = MutableLiveData<MutableList<IvItem>>()
+    val ivs: LiveData<MutableList<IvItem>> get() = _ivs
 
+    private val _itemsLoadingError = MutableLiveData<Boolean>()
+    val itemsLoadingError: LiveData<Boolean> get() = _itemsLoadingError
 
-    fun getIVs(year: Int, page: Int = 1){
+    private var page = 1
+
+    init {
+        _ivs.value = mutableListOf<IvItem>()
+    }
+
+    private fun addPageOfItems(items: List<IvItem>){
+        _ivs.value?.addAll(items)
+        _ivs.value = _ivs.value
+    }
+
+    fun getIVs(year: Int){
         viewModelScope.launch {
             _loading.value = true
             withContext(Dispatchers.IO) {
                 val response = retrofitRepo.getIVFromYearDistinct(year, page)
+                page++
                 withContext(Dispatchers.Main){
-                    _ivs.value = response
+                    if (response.status != RepositoryResponse.Status.ERROR && response.data != null){
+                        _itemsLoadingError.value = false
+                        addPageOfItems(response.data!!)
+                    }else{
+                        _itemsLoadingError.value = true
+                    }
                     _loading.value = false
                 }
             }
