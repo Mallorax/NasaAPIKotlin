@@ -21,8 +21,8 @@ class IVViewModel
 
     //TODO: Add more transparency to errors
 
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> get() = _loading
+    private val _loadingStatus = MutableLiveData<Boolean>()
+    val loadingStatus: LiveData<Boolean> get() = _loadingStatus
 
     private val _ivs = MutableLiveData<MutableList<IvItem>>()
     val ivs: LiveData<MutableList<IvItem>> get() = _ivs
@@ -43,7 +43,7 @@ class IVViewModel
 
     fun getIVs(year: Int){
         viewModelScope.launch {
-            _loading.value = true
+            _loadingStatus.value = true
             withContext(Dispatchers.IO) {
                 val response = retrofitRepo.getIVFromYearDistinct(year, page)
                 page++
@@ -54,9 +54,9 @@ class IVViewModel
                     }else{
                         _itemsLoadingError.value = true
                     }
-                    _loading.value = false
                 }
             }
+            _loadingStatus.value = false
         }
     }
 

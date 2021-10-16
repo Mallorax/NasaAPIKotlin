@@ -6,15 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
-import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
-import com.example.spaceinformer.repository.RepositoryResponse
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,7 +68,7 @@ class IVListFragment : Fragment() {
     }
 
     private fun handleLoading(){
-        ivViewModel.loading.observe(this.viewLifecycleOwner, { isLoading ->
+        ivViewModel.loadingStatus.observe(this.viewLifecycleOwner, { isLoading ->
             if (isLoading){
                 binding.progressBar.visibility = View.VISIBLE
                 binding.ivListRecycler.visibility = View.GONE
