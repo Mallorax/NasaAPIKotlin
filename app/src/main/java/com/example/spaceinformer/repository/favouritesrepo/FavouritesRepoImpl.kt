@@ -25,7 +25,9 @@ class FavouritesRepoImpl
         }
     }
 
-    override suspend fun getAllFavourites(): Flow<String> {
-        return nasaRoomDao.loadFavourites().map { it.nasaId }
+    override suspend fun getAllFavourites(): Flow<List<String>> {
+        return nasaRoomDao.getFavouritesDistinct()
+            .map { it.map { t-> t.nasaId } }
+
     }
 }

@@ -8,5 +8,5 @@ interface FavouritesRepo {
 
     suspend fun saveToFavourites(data: Data)
     suspend fun isFavourite(nasaId: String):Boolean
-    suspend fun getAllFavourites(): Flow<String>
+    suspend fun getAllFavourites(): Flow<List<String>>
 }

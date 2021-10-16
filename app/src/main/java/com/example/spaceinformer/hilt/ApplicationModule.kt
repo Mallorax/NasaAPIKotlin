@@ -43,8 +43,8 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providesRoomNasaDatabase(@ApplicationContext app: Context) =
-        Room.databaseBuilder(app, RoomNasaDatabase::class.java, "nasa_db").build()
+    fun providesRoomNasaDatabase(@ApplicationContext app: Context): RoomNasaDatabase =
+        Room.databaseBuilder(app, RoomNasaDatabase::class.java, "nasa.db").build()
 
     @Provides
     @Singleton

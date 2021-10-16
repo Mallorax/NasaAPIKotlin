@@ -29,7 +29,6 @@ class IVListFragment : Fragment() {
     ): View {
         _binding = IvListFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
-        binding.ivViewModel = ivViewModel
 
         val adapter = setUpRecyclerViewAdapter()
         val recycler = binding.ivListRecycler

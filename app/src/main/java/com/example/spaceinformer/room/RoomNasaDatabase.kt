@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.spaceinformer.room.entities.DataEntity
 
-@Database(entities = arrayOf(DataEntity::class), version = 1)
+@Database(entities = arrayOf(DataEntity::class), version = 3)
 abstract class RoomNasaDatabase: RoomDatabase() {
     abstract fun nasaDao(): FavouritesDao
 }

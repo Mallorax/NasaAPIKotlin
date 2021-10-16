@@ -10,7 +10,9 @@ import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,7 +25,7 @@ class FavouritesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _favourites = MutableLiveData<MutableList<IvItem>>()
-    private val favourites: LiveData<MutableList<IvItem>> get() = _favourites
+    val favourites: LiveData<MutableList<IvItem>> get() = _favourites
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -44,18 +46,23 @@ class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             _loadingStatus.value = true
             withContext(Dispatchers.IO){
-                roomFavouritesRepo.getAllFavourites().collect {
-                    val item = retrofitRepo.getIVWithNasaId(it)
-                    if (item.status != RepositoryResponse.Status.ERROR){
-                        addToFavouritesList(item.data!!)
-                        _favouritesLoadingError.value = false
-                    }else{
-                        _favouritesLoadingError.value = true
-                        _errorMessage.value = item.message!!
+                roomFavouritesRepo.getAllFavourites().collectLatest {
+                    it.forEach { id ->
+                        val item = retrofitRepo.getIVWithNasaId(id)
+                        withContext(Dispatchers.Main) {
+                            if (item.status != RepositoryResponse.Status.ERROR) {
+                                addToFavouritesList(item.data!!)
+                                _favouritesLoadingError.value = false
+                                _loadingStatus.value = false
+                            } else {
+                                _favouritesLoadingError.value = true
+                                _errorMessage.value = item.message!!
+                                _loadingStatus.value = false
+                            }
+                        }
                     }
                 }
             }
-            _loadingStatus.value = false
         }
     }
 
