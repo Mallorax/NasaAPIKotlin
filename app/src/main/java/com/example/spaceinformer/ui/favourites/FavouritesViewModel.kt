@@ -46,7 +46,7 @@ class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             _loadingStatus.value = true
             withContext(Dispatchers.IO){
-                roomFavouritesRepo.getAllFavourites().collectLatest {
+                roomFavouritesRepo.getAllFavourites().collect {
                     it.forEach { id ->
                         val item = retrofitRepo.getIVWithNasaId(id)
                         withContext(Dispatchers.Main) {
