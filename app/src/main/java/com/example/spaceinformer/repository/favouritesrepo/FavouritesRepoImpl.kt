@@ -4,6 +4,10 @@ import com.example.spaceinformer.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.room.FavouritesDao
 import com.example.spaceinformer.room.entities.DataEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavouritesRepoImpl
@@ -21,5 +25,9 @@ class FavouritesRepoImpl
         }else{
             false
         }
+    }
+
+    override suspend fun getAllFavourites(): Flow<String> {
+        return nasaRoomDao.loadFavourites().map { it.nasaId }
     }
 }

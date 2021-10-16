@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavouritesDao {
     @Query("SELECT * FROM data WHERE isFavourite = 1")
-    fun loadFavourites(): Flow<List<DataEntity>>
+    fun loadFavourites(): Flow<DataEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateFavourite(favourite: DataEntity)
