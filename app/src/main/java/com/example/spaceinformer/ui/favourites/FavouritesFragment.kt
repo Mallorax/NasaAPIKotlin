@@ -69,6 +69,8 @@ class FavouritesFragment : Fragment() {
                     "Navigation to details of: " + item.data?.first()?.title,
                     Snackbar.LENGTH_LONG
                 ).show()
+                val action = FavouritesFragmentDirections.actionFavouritesFragmentToDetailsFragment(nasaID)
+                view.findNavController().navigate(action)
             } else {
                 Snackbar.make(
                     requireContext(),

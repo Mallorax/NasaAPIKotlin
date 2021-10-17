@@ -23,7 +23,13 @@
     <fragment
         android:id="@+id/favourites_fragment"
         android:name="com.example.spaceinformer.ui.favourites.FavouritesFragment"
-        android:label="Favourites">
+        android:label="Favourites"
+        tools:layout="@layout/iv_list_fragment">
+
+        <action
+            android:id="@+id/action_favouritesFragment_to_details_fragment"
+            app:destination="@+id/detailsFragment">
+        </action>
 
     </fragment>
     <fragment
