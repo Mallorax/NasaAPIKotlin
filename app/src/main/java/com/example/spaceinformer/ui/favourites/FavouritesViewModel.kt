@@ -24,6 +24,7 @@ class FavouritesViewModel @Inject constructor(
     private val roomFavouritesRepo: FavouritesRepo
 ) : ViewModel() {
 
+    //TODO: make ui react to errors
     private val _favourites = MutableLiveData<MutableList<IvItem>>()
     val favourites: LiveData<MutableList<IvItem>> get() = _favourites
 

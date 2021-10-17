@@ -59,6 +59,7 @@ class FavouritesFragment : Fragment() {
         })
     }
 
+    //TODO: This code is duplicated, get rid of that somehow
     private fun setUpRecyclerViewAdapter(): IVListAdapter {
         return IVListAdapter(IVListAdapter.OnImageClickListener { item, view ->
             val nasaID = item?.data?.first()?.nasaId
