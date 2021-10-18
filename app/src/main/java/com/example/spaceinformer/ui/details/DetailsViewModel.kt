@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
-import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
+import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel
-@Inject constructor(private val repo: IVRetrofitRepository,
+@Inject constructor(private val repo: IVRepositoryImpl,
                     private val roomRepo: FavouritesRepo): ViewModel() {
 
     //TODO: For now its questionable if this viewmodel is needed

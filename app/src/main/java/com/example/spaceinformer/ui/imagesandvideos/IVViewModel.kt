@@ -5,7 +5,7 @@ import com.example.spaceinformer.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
-import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
+import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class IVViewModel
 @Inject constructor(
-    private val retrofitRepo: IVRetrofitRepository,
+    private val repoImpl: IVRepositoryImpl,
     private val roomFavouritesRepo: FavouritesRepo
 ) : ViewModel() {
 
@@ -45,7 +45,7 @@ class IVViewModel
         viewModelScope.launch {
             _loadingStatus.value = true
             withContext(Dispatchers.IO) {
-                val response = retrofitRepo.getIVFromYearDistinct(year, page)
+                val response = repoImpl.getIVFromYearDistinct(year, page)
                 page++
                 withContext(Dispatchers.Main){
                     if (response.status != RepositoryResponse.Status.ERROR && response.data != null){

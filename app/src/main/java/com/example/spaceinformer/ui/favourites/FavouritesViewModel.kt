@@ -7,20 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
-import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
+import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val retrofitRepo: IVRetrofitRepository,
+    private val repoImpl: IVRepositoryImpl,
     private val roomFavouritesRepo: FavouritesRepo
 ) : ViewModel() {
 
@@ -49,7 +46,7 @@ class FavouritesViewModel @Inject constructor(
             withContext(Dispatchers.IO){
                 roomFavouritesRepo.getAllFavourites().collect {
                     it.forEach { id ->
-                        val item = retrofitRepo.getIVWithNasaId(id)
+                        val item = repoImpl.getIVWithNasaId(id)
                         withContext(Dispatchers.Main) {
                             if (item.status != RepositoryResponse.Status.ERROR) {
                                 addToFavouritesList(item.data!!)

@@ -5,7 +5,7 @@ import com.example.spaceinformer.network.NasaPotdService
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepoImpl
 import com.example.spaceinformer.repository.ivrepo.IVRepository
-import com.example.spaceinformer.repository.ivrepo.IVRetrofitRepository
+import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import com.example.spaceinformer.repository.potdrepo.PotdRepository
 import com.example.spaceinformer.repository.potdrepo.PotdRetrofitRepository
 import com.example.spaceinformer.room.FavouritesDao
@@ -24,7 +24,7 @@ abstract class ViewModelModule {
      abstract fun potdRepository(repository: PotdRetrofitRepository): PotdRepository
 
     @Binds
-    abstract fun ivRepository(repository: IVRetrofitRepository): IVRepository
+    abstract fun ivRepository(repositoryImpl: IVRepositoryImpl): IVRepository
 
     @Binds
     abstract fun favouritesRepo(repo: FavouritesRepoImpl): FavouritesRepo
@@ -38,8 +38,8 @@ abstract class ViewModelModule {
 
     @Inject
     @ViewModelScoped
-    fun ivRetrofitRepository(retrofit: NasaIVEndpointService): IVRepository {
-        return IVRetrofitRepository(retrofit)
+    fun ivRetrofitRepository(retrofit: NasaIVEndpointService, favouritesDao: FavouritesDao): IVRepository {
+        return IVRepositoryImpl(retrofit, favouritesDao)
     }
 
     @Inject
