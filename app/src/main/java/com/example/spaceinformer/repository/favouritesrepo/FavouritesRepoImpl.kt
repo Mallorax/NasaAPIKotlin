@@ -27,6 +27,9 @@ class FavouritesRepoImpl
 
     override suspend fun getAllFavourites(): Flow<List<String>> {
         return nasaRoomDao.getFavouritesDistinct()
+            .filter { t-> t.all {
+                it.isFavourite
+            } }
             .map { it.map { t-> t.nasaId } }
 
     }

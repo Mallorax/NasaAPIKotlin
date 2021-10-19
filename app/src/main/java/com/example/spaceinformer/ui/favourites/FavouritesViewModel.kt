@@ -49,6 +49,9 @@ class FavouritesViewModel @Inject constructor(
                         val item = repoImpl.getIVWithNasaId(id)
                         withContext(Dispatchers.Main) {
                             if (item.status != RepositoryResponse.Status.ERROR) {
+                                item.data.apply {
+                                    this?.data?.first()?.favourite = true
+                                }
                                 addToFavouritesList(item.data!!)
                                 _favouritesLoadingError.value = false
                                 _loadingStatus.value = false
