@@ -43,8 +43,12 @@ class FavouritesFragment : Fragment() {
             adapter.notifyItemInserted(count)
         })
         recycler.adapter = adapter
-        favouritesViewModel.loadFavourites()
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        favouritesViewModel.loadFavourites()
     }
 
     private fun handleLoading(){

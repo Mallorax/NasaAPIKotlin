@@ -1,15 +1,13 @@
 package com.example.spaceinformer.ui.details
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,20 +17,38 @@ class DetailsViewModel
 
     //TODO: For now its questionable if this viewmodel is needed
     // or if other one could be reused for details fragment, reevaluate this later in the project
+    private val _detailedIvItem = MutableLiveData<IvItem>()
+    val detailedIvItem: LiveData<IvItem> get() = _detailedIvItem
 
-    fun getSpecificIV(nasaId: String): LiveData<RepositoryResponse<IvItem>> {
-        return liveData(context = viewModelScope.coroutineContext + Dispatchers.Default) {
-            val data = repo.getIVWithNasaId(nasaId)
-            this.emit(data)
+    private val _errorNotification = MutableLiveData<String>()
+    val errorNotification: LiveData<String> get() = _errorNotification
+
+
+    fun getSpecificIV(nasaId: String){
+        viewModelScope.launch(Dispatchers.IO){
+            val response = repo.getIVWithNasaId(nasaId)
+            if (response.status == RepositoryResponse.Status.SUCCESS){
+                val isFavourite = roomRepo.isFavourite(nasaId)
+                if (isFavourite){
+                    response.data?.data?.first()?.favourite = true
+                }
+                _detailedIvItem.postValue(response.data!!)
+            }else if (response.status == RepositoryResponse.Status.ERROR){
+                _errorNotification.postValue(response.message!!)
+            }
         }
     }
 
-    fun isCurrentDataFavourite(nasaId: String):LiveData<Boolean>{
-        return liveData (context = viewModelScope.coroutineContext + Dispatchers.IO){
-            val isFavourite = roomRepo.isFavourite(nasaId)
-            this.emit(isFavourite)
-        }
 
+    fun updateFavourite(){
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = _detailedIvItem.value
+            if (data != null){
+                data.data?.first()?.favourite = !data.data?.first()?.favourite!!
+                _detailedIvItem.postValue(data!!)
+                roomRepo.saveToFavourites(data.data?.first()!!)
+            }
+        }
     }
 
 }

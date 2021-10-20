@@ -10,8 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.DetailsFragmentBinding
-import com.example.spaceinformer.databinding.FragmentPotdBinding
-import com.example.spaceinformer.ui.imagesandvideos.IVListFragment
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,19 +29,25 @@ class DetailsFragment: Fragment() {
     ): View {
         _binding = DetailsFragmentBinding.inflate(inflater)
         binding.viewModel = viewModel
-        viewModel.getSpecificIV(args.nasaId).observe(this.viewLifecycleOwner, Observer { item ->
-            val data = item.data?.data?.first()
-            binding.descriptionText.text = data?.description
-            binding.titleText.text = data?.title
-            Picasso.get().load(item.data?.imageLinks?.first()?.href).into(binding.mainImageView)
-        })
-        viewModel.isCurrentDataFavourite(args.nasaId).observe(this.viewLifecycleOwner, Observer { isFavourite ->
-            if (isFavourite){
-                binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_24)
-            }else if (!isFavourite){
-                binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        viewModel.detailedIvItem.observe(this.viewLifecycleOwner, Observer { item ->
+            val data = item.data?.first()
+            if (data != null){
+                binding.descriptionText.text = data.description
+                binding.titleText.text = data.title
+                Picasso.get().load(item.imageLinks?.first()?.href).into(binding.mainImageView)
+                if (data.favourite){
+                    binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_24)
+                }else{
+                    binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                }
             }
         })
+
+        viewModel.getSpecificIV(args.nasaId)
+
+        binding.favouriteImageView.setOnClickListener {
+            viewModel.updateFavourite()
+        }
         return binding.root
     }
 
