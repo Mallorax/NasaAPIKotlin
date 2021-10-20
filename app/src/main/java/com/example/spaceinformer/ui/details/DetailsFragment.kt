@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.DetailsFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +22,7 @@ class DetailsFragment: Fragment() {
 
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +42,20 @@ class DetailsFragment: Fragment() {
                 }else{
                     binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 }
+            }
+        })
+
+        viewModel.loading.observe(this.viewLifecycleOwner, Observer {
+            if (it){
+                binding.progressBar.visibility = View.VISIBLE
+            }else{
+                binding.progressBar.visibility = View.GONE
+            }
+        })
+
+        viewModel.errorNotification.observe(this.viewLifecycleOwner, Observer {
+            if (it != null){
+                Snackbar.make(this.requireView(), it, Snackbar.LENGTH_LONG).show()
             }
         })
 

@@ -1,5 +1,6 @@
 package com.example.spaceinformer.ui.details
 
+import android.text.BoringLayout
 import androidx.lifecycle.*
 import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
@@ -23,9 +24,13 @@ class DetailsViewModel
     private val _errorNotification = MutableLiveData<String>()
     val errorNotification: LiveData<String> get() = _errorNotification
 
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
+
 
     fun getSpecificIV(nasaId: String){
         viewModelScope.launch(Dispatchers.IO){
+            _loading.postValue(true)
             val response = repo.getIVWithNasaId(nasaId)
             if (response.status == RepositoryResponse.Status.SUCCESS){
                 val isFavourite = roomRepo.isFavourite(nasaId)
@@ -36,6 +41,7 @@ class DetailsViewModel
             }else if (response.status == RepositoryResponse.Status.ERROR){
                 _errorNotification.postValue(response.message!!)
             }
+            _loading.postValue(false)
         }
     }
 
