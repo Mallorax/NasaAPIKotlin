@@ -32,7 +32,7 @@ class PotdFragment: Fragment() {
         setHasOptionsMenu(true)
         //bindings
         _baseBinding = FragmentPotdBinding.inflate(inflater)
-        baseBinding.lifecycleOwner = this
+        baseBinding.lifecycleOwner = viewLifecycleOwner
         baseBinding.potdViewModel = viewModel
 
         setUpObservers()

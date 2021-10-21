@@ -30,6 +30,7 @@ class DetailsFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DetailsFragmentBinding.inflate(inflater)
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         viewModel.detailedIvItem.observe(this.viewLifecycleOwner, Observer { item ->
             val data = item.data?.first()

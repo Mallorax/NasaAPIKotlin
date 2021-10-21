@@ -13,6 +13,7 @@ import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.IndexOutOfBoundsException
 
 //Images & Videos
 @AndroidEntryPoint
@@ -21,6 +22,7 @@ class IVListFragment : Fragment() {
     private val ivViewModel: IVViewModel by viewModels()
     private var _binding: IvListFragmentBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter: IVListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,9 +30,9 @@ class IVListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = IvListFragmentBinding.inflate(inflater)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        val adapter = setUpRecyclerViewAdapter()
+        adapter = setUpRecyclerViewAdapter()
         val recycler = binding.ivListRecycler
 
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
@@ -41,10 +43,10 @@ class IVListFragment : Fragment() {
         showError()
 
         recycler.adapter = adapter
-        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)){
+                if (!recyclerView.canScrollVertically(1)) {
                     ivViewModel.getIVs(2021)
                 }
             }
@@ -52,26 +54,32 @@ class IVListFragment : Fragment() {
         return binding.root
     }
 
-    private fun showListOfData(adapter: IVListAdapter){
+    override fun onStart() {
+        super.onStart()
+
+    }
+
+
+    private fun showListOfData(adapter: IVListAdapter) {
         ivViewModel.ivs.observe(this.viewLifecycleOwner, { items ->
             adapter.submitList(items)
         })
     }
 
-    private fun showError(){
+    private fun showError() {
         ivViewModel.itemsLoadingError.observe(this.viewLifecycleOwner, {
-            if (it){
+            if (it) {
                 Snackbar.make(this.requireView(), "Error occurred", Snackbar.LENGTH_LONG).show()
             }
         })
     }
 
-    private fun handleLoading(){
+    private fun handleLoading() {
         ivViewModel.loadingStatus.observe(this.viewLifecycleOwner, { isLoading ->
-            if (isLoading){
+            if (isLoading) {
                 binding.progressBar.visibility = View.VISIBLE
                 binding.ivListRecycler.visibility = View.GONE
-            }else{
+            } else {
                 binding.progressBar.visibility = View.GONE
                 binding.ivListRecycler.visibility = View.VISIBLE
             }

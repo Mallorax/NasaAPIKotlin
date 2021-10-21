@@ -30,7 +30,7 @@ class FavouritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = IvListFragmentBinding.inflate(inflater)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val adapter = setUpRecyclerViewAdapter()
         val recycler = binding.ivListRecycler

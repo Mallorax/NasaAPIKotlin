@@ -36,10 +36,12 @@ class IVViewModel
         _ivs.value = mutableListOf<IvItem>()
     }
 
+
     private fun addPageOfItems(items: List<IvItem>){
         _ivs.value?.addAll(items)
         _ivs.value = _ivs.value
     }
+
 
     fun getIVs(year: Int){
         viewModelScope.launch {
@@ -59,6 +61,7 @@ class IVViewModel
             _loadingStatus.value = false
         }
     }
+
 
     fun saveFavourite(data: Data) {
         viewModelScope.launch(Dispatchers.IO) {
