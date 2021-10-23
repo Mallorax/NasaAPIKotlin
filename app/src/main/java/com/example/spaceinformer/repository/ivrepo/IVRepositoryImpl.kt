@@ -1,12 +1,10 @@
 package com.example.spaceinformer.repository.ivrepo
 
-import com.example.spaceinformer.nasapi.imagesandpictures.IVResponsePojo
-import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.repository.BaseDataSource
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.room.FavouritesDao
-import retrofit2.Response
 import javax.inject.Inject
 
 class IVRepositoryImpl @Inject constructor(

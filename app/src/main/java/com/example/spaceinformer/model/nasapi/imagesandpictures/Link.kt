@@ -1,13 +1,12 @@
-package com.example.spaceinformer.nasapi.imagesandpictures
+package com.example.spaceinformer.model.nasapi.imagesandpictures
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ImageLink {
-
-    @SerializedName("render")
+class Link {
+    @SerializedName("prompt")
     @Expose
-    var render: String? = null
+    var prompt: String? = null
 
     @SerializedName("href")
     @Expose

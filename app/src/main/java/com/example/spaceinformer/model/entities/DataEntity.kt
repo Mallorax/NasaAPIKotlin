@@ -1,4 +1,4 @@
-package com.example.spaceinformer.room.entities
+package com.example.spaceinformer.model.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

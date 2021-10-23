@@ -1,7 +1,6 @@
 package com.example.spaceinformer.repository.potdrepo
 
-import androidx.lifecycle.LiveData
-import com.example.spaceinformer.nasapi.potd.Potd
+import com.example.spaceinformer.model.nasapi.potd.Potd
 import retrofit2.Response
 
 interface PotdRepository {

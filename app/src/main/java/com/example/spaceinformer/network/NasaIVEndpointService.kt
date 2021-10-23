@@ -1,6 +1,6 @@
 package com.example.spaceinformer.network
 
-import com.example.spaceinformer.nasapi.imagesandpictures.IVResponsePojo
+import com.example.spaceinformer.model.nasapi.imagesandpictures.IVResponsePojo
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListItemBinding
-import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 
 
 class IVListAdapter(private val onImageClickListener: OnImageClickListener,

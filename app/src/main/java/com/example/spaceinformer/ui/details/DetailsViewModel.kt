@@ -1,8 +1,7 @@
 package com.example.spaceinformer.ui.details
 
-import android.text.BoringLayout
 import androidx.lifecycle.*
-import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl

@@ -1,10 +1,8 @@
 package com.example.spaceinformer.repository.favouritesrepo
 
-import com.example.spaceinformer.nasapi.imagesandpictures.Data
-import com.example.spaceinformer.network.NasaIVEndpointService
+import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.room.FavouritesDao
-import com.example.spaceinformer.room.entities.DataEntity
-import kotlinx.coroutines.Dispatchers
+import com.example.spaceinformer.model.entities.DataEntity
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 

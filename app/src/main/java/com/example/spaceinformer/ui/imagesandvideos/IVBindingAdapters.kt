@@ -4,7 +4,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("ivItemTitle")

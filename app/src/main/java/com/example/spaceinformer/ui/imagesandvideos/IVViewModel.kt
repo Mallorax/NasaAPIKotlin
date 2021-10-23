@@ -1,8 +1,8 @@
 package com.example.spaceinformer.ui.imagesandvideos
 
 import androidx.lifecycle.*
-import com.example.spaceinformer.nasapi.imagesandpictures.Data
-import com.example.spaceinformer.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
+import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl

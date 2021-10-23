@@ -1,7 +1,6 @@
 package com.example.spaceinformer.repository.favouritesrepo
 
-import com.example.spaceinformer.nasapi.imagesandpictures.Data
-import com.example.spaceinformer.room.entities.DataEntity
+import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import kotlinx.coroutines.flow.Flow
 
 interface FavouritesRepo {

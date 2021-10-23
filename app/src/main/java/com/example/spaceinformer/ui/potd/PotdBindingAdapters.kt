@@ -1,13 +1,12 @@
 package com.example.spaceinformer.ui.potd
 
 import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
-import android.media.browse.MediaBrowser
 import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.example.spaceinformer.nasapi.potd.Potd
+import com.example.spaceinformer.model.nasapi.potd.Potd
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.squareup.picasso.Picasso
