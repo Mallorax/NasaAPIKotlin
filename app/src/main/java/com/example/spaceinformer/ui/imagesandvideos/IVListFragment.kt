@@ -89,12 +89,12 @@ class IVListFragment : Fragment() {
 
     private fun setUpRecyclerViewAdapter(): IVListAdapter {
         return IVListAdapter(IVListAdapter.OnImageClickListener { item, view ->
-            val nasaID = item?.data?.first()?.nasaId
+            val nasaID = item?.nasaId
             if (nasaID != null) {
                 Snackbar.make(
                     requireContext(),
                     view,
-                    "Navigation to details of: " + item.data?.first()?.title,
+                    "Navigation to details of: " + item.title,
                     Snackbar.LENGTH_LONG
                 ).show()
                 val action = IVListFragmentDirections.actionIVListFragmentToDetailsFragment(nasaID)
@@ -103,31 +103,31 @@ class IVListFragment : Fragment() {
                 Snackbar.make(
                     requireContext(),
                     view,
-                    "Id of an item not found: " + item?.data?.first()?.title,
+                    "Id of an item not found: " + item?.title,
                     Snackbar.LENGTH_LONG
                 ).show()
             }
         }, IVListAdapter.OnFavouriteClickListener { item, view ->
-            if (item?.data?.first()?.favourite == false) {
+            if (item?.favourite == false) {
                 view.setImageResource(R.drawable.ic_baseline_favorite_24)
                 Snackbar.make(
                     requireContext(),
                     view,
-                    "Favorite: " + item.data?.first()?.title,
+                    "Favorite: " + item.title,
                     Snackbar.LENGTH_LONG
                 ).show()
-                item.data?.first()?.favourite = true
-                ivViewModel.saveFavourite(item.data!!.first())
+                item.favourite = true
+                ivViewModel.saveFavourite(item)
             } else {
                 view.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 Snackbar.make(
                     requireContext(),
                     view,
-                    "Not favorite: " + item?.data?.first()?.title,
+                    "Not favorite: " + item?.title,
                     Snackbar.LENGTH_LONG
                 ).show()
-                item?.data?.first()?.favourite = false
-                ivViewModel.saveFavourite(item?.data!!.first())
+                item?.favourite = false
+                ivViewModel.saveFavourite(item)
             }
         })
     }

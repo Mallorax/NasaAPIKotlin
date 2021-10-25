@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.AppIvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,8 +21,8 @@ class FavouritesViewModel @Inject constructor(
 ) : ViewModel() {
 
     //TODO: make ui react to errors
-    private val _favourites = MutableLiveData<MutableList<IvItem>>()
-    val favourites: LiveData<MutableList<IvItem>> get() = _favourites
+    private val _favourites = MutableLiveData<MutableList<AppIvItem>>()
+    val favourites: LiveData<MutableList<AppIvItem>> get() = _favourites
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -67,8 +66,8 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun addToFavouritesList(item: IvItem){
-        _favourites.value?.add(item)
+    private fun addToFavouritesList(itemApp: AppIvItem){
+        _favourites.value?.add(itemApp)
         _favourites.value = _favourites.value
     }
 }

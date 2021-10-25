@@ -1,10 +1,9 @@
 package com.example.spaceinformer.repository.ivrepo
 
-import com.example.spaceinformer.model.appmodels.AppIvItem
+import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.entities.DataEntity
 import com.example.spaceinformer.model.mapIvItemNetwork
 import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
-import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.repository.BaseDataSource
 import com.example.spaceinformer.repository.RepositoryResponse
@@ -24,13 +23,13 @@ class IVRepositoryImpl @Inject constructor(
     override suspend fun getIVFromYearDistinct(
         year: Int,
         page: Int
-    ): RepositoryResponse<List<AppIvItem>> {
+    ): RepositoryResponse<List<DomainIvItem>> {
         val yearString = year.toString()
         val response = getResult {
             retrofit.getIVFromYear(yearString, page)
         }
-        val datasourceResponse = response.data?.ivDataCollection?.ivItems
-        var result: List<AppIvItem>
+        val datasourceResponse = response.data?.ivDataCollection?.appIvItems
+        var result: List<DomainIvItem>
 
         try {
             result = datasourceResponse?.flatMap{
@@ -54,14 +53,14 @@ class IVRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun getIVWithNasaId(id: String): RepositoryResponse<IvItem> {
+    override suspend fun getIVWithNasaId(id: String): RepositoryResponse<com.example.spaceinformer.model.nasapi.imagesandpictures.AppIvItem> {
         val response = getResult { retrofit.getIVWithId(id) }
-        val result = response.data?.ivDataCollection?.ivItems?.first()
+        val result = response.data?.ivDataCollection?.appIvItems?.first()
         return RepositoryResponse(response.status, result, response.message)
     }
 
-    override suspend fun saveToFavourites(data: Data) {
-        val dataEntity = DataEntity(data.nasaId!!, isFavourite = data.favourite)
+    override suspend fun saveToFavourites(data: DomainIvItem) {
+        val dataEntity = DataEntity(data.nasaId, isFavourite = data.favourite)
         favDao.insertOrUpdateFavourite(dataEntity)
     }
 

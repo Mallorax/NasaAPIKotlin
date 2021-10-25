@@ -32,7 +32,7 @@ class DetailsFragment: Fragment() {
         _binding = DetailsFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        viewModel.detailedIvItem.observe(this.viewLifecycleOwner, Observer { item ->
+        viewModel.detailedAppIvItem.observe(this.viewLifecycleOwner, Observer { item ->
             val data = item.data?.first()
             if (data != null){
                 binding.descriptionText.text = data.description

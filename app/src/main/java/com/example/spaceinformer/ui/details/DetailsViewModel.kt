@@ -1,7 +1,7 @@
 package com.example.spaceinformer.ui.details
 
 import androidx.lifecycle.*
-import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.imagesandpictures.AppIvItem
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
@@ -17,8 +17,8 @@ class DetailsViewModel
 
     //TODO: For now its questionable if this viewmodel is needed
     // or if other one could be reused for details fragment, reevaluate this later in the project
-    private val _detailedIvItem = MutableLiveData<IvItem>()
-    val detailedIvItem: LiveData<IvItem> get() = _detailedIvItem
+    private val _detailedIvItem = MutableLiveData<AppIvItem>()
+    val detailedAppIvItem: LiveData<AppIvItem> get() = _detailedIvItem
 
     private val _errorNotification = MutableLiveData<String>()
     val errorNotification: LiveData<String> get() = _errorNotification

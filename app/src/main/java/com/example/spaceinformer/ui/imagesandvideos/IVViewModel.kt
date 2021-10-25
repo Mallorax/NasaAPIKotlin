@@ -1,10 +1,9 @@
 package com.example.spaceinformer.ui.imagesandvideos
 
 import androidx.lifecycle.*
+import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
-import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.repository.RepositoryResponse
-import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +15,6 @@ import javax.inject.Inject
 class IVViewModel
 @Inject constructor(
     private val repoImpl: IVRepositoryImpl,
-    private val roomFavouritesRepo: FavouritesRepo
 ) : ViewModel() {
 
     //TODO: Add more transparency to errors
@@ -24,8 +22,8 @@ class IVViewModel
     private val _loadingStatus = MutableLiveData<Boolean>()
     val loadingStatus: LiveData<Boolean> get() = _loadingStatus
 
-    private val _ivs = MutableLiveData<MutableList<IvItem>>()
-    val ivs: LiveData<MutableList<IvItem>> get() = _ivs
+    private val _ivs = MutableLiveData<MutableList<DomainIvItem>>()
+    val ivs: LiveData<MutableList<DomainIvItem>> get() = _ivs
 
     private val _itemsLoadingError = MutableLiveData<Boolean>()
     val itemsLoadingError: LiveData<Boolean> get() = _itemsLoadingError
@@ -33,11 +31,11 @@ class IVViewModel
     private var page = 1
 
     init {
-        _ivs.value = mutableListOf<IvItem>()
+        _ivs.value = mutableListOf<DomainIvItem>()
     }
 
 
-    private fun addPageOfItems(items: List<IvItem>){
+    private fun addPageOfItems(items: List<DomainIvItem>){
         _ivs.value?.addAll(items)
         _ivs.value = _ivs.value
     }
@@ -63,9 +61,9 @@ class IVViewModel
     }
 
 
-    fun saveFavourite(data: Data) {
+    fun saveFavourite(data: DomainIvItem) {
         viewModelScope.launch(Dispatchers.IO) {
-            roomFavouritesRepo.saveToFavourites(data)
+            repoImpl.saveToFavourites(data)
         }
     }
 

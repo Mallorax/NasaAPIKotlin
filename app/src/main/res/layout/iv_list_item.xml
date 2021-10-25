@@ -6,7 +6,7 @@
     <data>
         <variable
             name="bindedItem"
-            type="com.example.spaceinformer.nasapi.imagesandpictures.IvItem" />
+            type="com.example.spaceinformer.model.appmodels.DomainIvItem" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

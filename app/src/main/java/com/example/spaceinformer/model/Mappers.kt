@@ -1,11 +1,10 @@
 package com.example.spaceinformer.model
 
-import com.example.spaceinformer.model.appmodels.AppIvItem
+import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
-import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 
-fun mapIvItemNetwork(input: Data): AppIvItem{
-    return AppIvItem(
+fun mapIvItemNetwork(input: Data): DomainIvItem{
+    return DomainIvItem(
         input.mediaType.orEmpty(),
         input.description.orEmpty(),
         input.mediaType.orEmpty(),

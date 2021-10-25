@@ -22,5 +22,5 @@ class IvDataCollection {
 
     @SerializedName("items")
     @Expose
-    var ivItems: List<IvItem>? = null
+    var appIvItems: List<AppIvItem>? = null
 }
