@@ -24,7 +24,7 @@ class IVRepositoryImpl @Inject constructor(
     override suspend fun getIVFromYearDistinct(
         year: Int,
         page: Int
-    ): RepositoryResponse<List<IvItem>> {
+    ): RepositoryResponse<List<AppIvItem>> {
         val yearString = year.toString()
         val response = getResult {
             retrofit.getIVFromYear(yearString, page)
@@ -36,7 +36,7 @@ class IVRepositoryImpl @Inject constructor(
             result = datasourceResponse?.flatMap{
                 it.data!!.map { t-> mapIvItemNetwork(t) }
             }!!
-            getAllFavourites().collect { favs->
+            getAllFavourites().collect { favs ->
                 favs.forEach { fav ->
                     result.find { item ->
                         item.nasaId == fav.nasaId && fav.isFavourite
@@ -47,7 +47,7 @@ class IVRepositoryImpl @Inject constructor(
                     }
                 }
             }
-            return RepositoryResponse(response.status, datasourceResponse, response.message)
+            return RepositoryResponse(response.status, result, response.message)
         }catch (e: Exception){
             return RepositoryResponse.error(e.message.orEmpty())
         }
