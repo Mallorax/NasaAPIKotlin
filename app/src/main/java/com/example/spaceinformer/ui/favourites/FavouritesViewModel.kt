@@ -4,25 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spaceinformer.model.nasapi.imagesandpictures.AppIvItem
+import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.repository.RepositoryResponse
-import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val repoImpl: IVRepositoryImpl,
-    private val roomFavouritesRepo: FavouritesRepo
-) : ViewModel() {
+    private val repoImpl: IVRepositoryImpl) : ViewModel() {
 
     //TODO: make ui react to errors
-    private val _favourites = MutableLiveData<MutableList<AppIvItem>>()
-    val favourites: LiveData<MutableList<AppIvItem>> get() = _favourites
+    private val _favourites = MutableLiveData<MutableList<DomainIvItem>>()
+    val favourites: LiveData<MutableList<DomainIvItem>> get() = _favourites
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -43,13 +41,13 @@ class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             _loadingStatus.value = true
             withContext(Dispatchers.IO){
-                roomFavouritesRepo.getAllFavourites().collect {
+                repoImpl.getAllFavouritesIds().collect {
                     it.forEach { id ->
                         val item = repoImpl.getIVWithNasaId(id)
                         withContext(Dispatchers.Main) {
                             if (item.status != RepositoryResponse.Status.ERROR) {
                                 item.data.apply {
-                                    this?.data?.first()?.favourite = true
+                                    this?.favourite = true
                                 }
                                 addToFavouritesList(item.data!!)
                                 _favouritesLoadingError.value = false
@@ -66,7 +64,8 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun addToFavouritesList(itemApp: AppIvItem){
+
+    private fun addToFavouritesList(itemApp: DomainIvItem){
         _favourites.value?.add(itemApp)
         _favourites.value = _favourites.value
     }
