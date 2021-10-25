@@ -3,7 +3,7 @@ package com.example.spaceinformer.model.nasapi.imagesandpictures
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class AppIvItem {
+class IvItem {
     @SerializedName("href")
     @Expose
     var href: String? = null

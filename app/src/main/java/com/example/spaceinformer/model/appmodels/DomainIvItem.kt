@@ -12,5 +12,6 @@ data class DomainIvItem(
     val album: List<String>,
     val nasaId: String,
     val location: String,
-    var favourite: Boolean
+    var favourite: Boolean,
+    val imageThumbnail: String
 )

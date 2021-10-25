@@ -3,7 +3,6 @@ package com.example.spaceinformer.repository.ivrepo
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.entities.DataEntity
 import com.example.spaceinformer.model.mapIvItemNetwork
-import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.repository.BaseDataSource
 import com.example.spaceinformer.repository.RepositoryResponse
@@ -28,13 +27,11 @@ class IVRepositoryImpl @Inject constructor(
         val response = getResult {
             retrofit.getIVFromYear(yearString, page)
         }
-        val datasourceResponse = response.data?.ivDataCollection?.appIvItems
-        var result: List<DomainIvItem>
+        val datasourceResponse = response.data?.ivDataCollection?.ivItems
+        val result: List<DomainIvItem>
 
         try {
-            result = datasourceResponse?.flatMap{
-                it.data!!.map { t-> mapIvItemNetwork(t) }
-            }!!
+            result = datasourceResponse?.map { t-> mapIvItemNetwork(t) }!!
             getAllFavourites().collect { favs ->
                 favs.forEach { fav ->
                     result.find { item ->
@@ -53,9 +50,12 @@ class IVRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun getIVWithNasaId(id: String): RepositoryResponse<com.example.spaceinformer.model.nasapi.imagesandpictures.AppIvItem> {
+    override suspend fun getIVWithNasaId(id: String): RepositoryResponse<DomainIvItem> {
         val response = getResult { retrofit.getIVWithId(id) }
-        val result = response.data?.ivDataCollection?.appIvItems?.first()
+        val datasourceResponse = response.data?.ivDataCollection?.ivItems
+        val result = datasourceResponse?.map{
+            mapIvItemNetwork(it)
+        }!!.first()
         return RepositoryResponse(response.status, result, response.message)
     }
 
