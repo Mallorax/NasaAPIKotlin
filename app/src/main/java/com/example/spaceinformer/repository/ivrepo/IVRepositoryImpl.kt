@@ -1,10 +1,17 @@
 package com.example.spaceinformer.repository.ivrepo
 
+import com.example.spaceinformer.model.appmodels.AppIvItem
+import com.example.spaceinformer.model.entities.DataEntity
+import com.example.spaceinformer.model.mapIvItemNetwork
+import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.repository.BaseDataSource
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.room.FavouritesDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import java.lang.Exception
 import javax.inject.Inject
 
 class IVRepositoryImpl @Inject constructor(
@@ -22,23 +29,63 @@ class IVRepositoryImpl @Inject constructor(
         val response = getResult {
             retrofit.getIVFromYear(yearString, page)
         }
-        if (response.status == RepositoryResponse.Status.SUCCESS) {
-            response.data?.ivDataCollection?.ivItems?.apply {
-                this.forEach{
-                    if (favDao.doesDataExist(it.data?.first()?.nasaId!!)){
-                        it.data?.first()?.favourite = favDao.getFavouriteWithId(it.data?.first()?.nasaId!!).isFavourite
+        val datasourceResponse = response.data?.ivDataCollection?.ivItems
+        var result: List<AppIvItem>
+
+        try {
+            result = datasourceResponse?.flatMap{
+                it.data!!.map { t-> mapIvItemNetwork(t) }
+            }!!
+            getAllFavourites().collect { favs->
+                favs.forEach { fav ->
+                    result.find { item ->
+                        item.nasaId == fav.nasaId && fav.isFavourite
+                    }.let {
+                        if (it != null){
+                            it.favourite = fav.isFavourite
+                        }
                     }
                 }
             }
+            return RepositoryResponse(response.status, datasourceResponse, response.message)
+        }catch (e: Exception){
+            return RepositoryResponse.error(e.message.orEmpty())
         }
-        val result = response.data?.ivDataCollection?.ivItems
-        return RepositoryResponse(response.status, result, response.message)
+
+
+
+       
     }
 
     override suspend fun getIVWithNasaId(id: String): RepositoryResponse<IvItem> {
         val response = getResult { retrofit.getIVWithId(id) }
         val result = response.data?.ivDataCollection?.ivItems?.first()
         return RepositoryResponse(response.status, result, response.message)
+    }
+
+    override suspend fun saveToFavourites(data: Data) {
+        val dataEntity = DataEntity(data.nasaId!!, isFavourite = data.favourite)
+        favDao.insertOrUpdateFavourite(dataEntity)
+    }
+
+    override fun isFavourite(nasaId: String): Flow<Boolean> {
+        return if (favDao.doesDataExist(nasaId)){
+            val dataEntity = favDao.getFavouriteWithId(nasaId)
+            dataEntity.isFavourite
+        }else{
+            false
+        }
+    }
+
+    override  fun getAllFavourites(): Flow<List<DataEntity>> {
+        return favDao.getFavouritesDistinct()
+            .filter { t ->
+                t!!.all {
+                it.isFavourite
+            } }
+            .map { it!!.map { t-> t.nasaId } }
+            .flowOn(Dispatchers.IO)
+
     }
 
 }

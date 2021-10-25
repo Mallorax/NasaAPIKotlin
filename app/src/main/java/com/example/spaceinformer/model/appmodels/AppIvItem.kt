@@ -1,6 +1,6 @@
 package com.example.spaceinformer.model.appmodels
 
-data class NasaIvItem(
+data class AppIvItem(
     val mediaLink: String,
     val description: String,
     val mediaType: String,

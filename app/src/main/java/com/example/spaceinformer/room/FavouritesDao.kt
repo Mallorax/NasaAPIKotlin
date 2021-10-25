@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Dao
 interface FavouritesDao {
     @Query("SELECT * FROM data WHERE isFavourite == 1")
-    fun loadFavourites(): Flow<List<DataEntity>>
+    fun loadFavourites(): Flow<List<DataEntity>?>
 
     fun getFavouritesDistinct() = loadFavourites().distinctUntilChanged()
 
@@ -22,5 +22,5 @@ interface FavouritesDao {
     suspend fun getFavouriteWithId(id: String): DataEntity
 
     @Query("SELECT EXISTS(SELECT * FROM data WHERE nasa_id = :id)")
-    suspend fun doesDataExist(id: String):Boolean
+    suspend fun doesDataExist(id: String):Flow<Boolean>
 }
