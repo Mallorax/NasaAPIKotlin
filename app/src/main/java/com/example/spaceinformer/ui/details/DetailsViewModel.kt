@@ -1,9 +1,8 @@
 package com.example.spaceinformer.ui.details
 
 import androidx.lifecycle.*
-import com.example.spaceinformer.model.nasapi.imagesandpictures.AppIvItem
+import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.repository.RepositoryResponse
-import com.example.spaceinformer.repository.favouritesrepo.FavouritesRepo
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,13 +11,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel
-@Inject constructor(private val repo: IVRepositoryImpl,
-                    private val roomRepo: FavouritesRepo): ViewModel() {
+@Inject constructor(private val repo: IVRepositoryImpl): ViewModel() {
 
     //TODO: For now its questionable if this viewmodel is needed
     // or if other one could be reused for details fragment, reevaluate this later in the project
-    private val _detailedIvItem = MutableLiveData<AppIvItem>()
-    val detailedAppIvItem: LiveData<AppIvItem> get() = _detailedIvItem
+    private val _detailedIvItem = MutableLiveData<DomainIvItem>()
+    val detailedAppIvItem: LiveData<DomainIvItem> get() = _detailedIvItem
 
     private val _errorNotification = MutableLiveData<String>()
     val errorNotification: LiveData<String> get() = _errorNotification
@@ -32,9 +30,11 @@ class DetailsViewModel
             _loading.postValue(true)
             val response = repo.getIVWithNasaId(nasaId)
             if (response.status == RepositoryResponse.Status.SUCCESS){
-                val isFavourite = roomRepo.isFavourite(nasaId)
-                if (isFavourite){
-                    response.data?.data?.first()?.favourite = true
+                val isFavourite = repo.isFavourite(nasaId)
+                if (isFavourite.status == RepositoryResponse.Status.SUCCESS){
+                    if (isFavourite.data!!){
+                        response.data?.favourite = true
+                    }
                 }
                 _detailedIvItem.postValue(response.data!!)
             }else if (response.status == RepositoryResponse.Status.ERROR){
@@ -49,9 +49,9 @@ class DetailsViewModel
         viewModelScope.launch(Dispatchers.IO) {
             val data = _detailedIvItem.value
             if (data != null){
-                data.data?.first()?.favourite = !data.data?.first()?.favourite!!
+                data.favourite = !data.favourite
                 _detailedIvItem.postValue(data!!)
-                roomRepo.saveToFavourites(data.data?.first()!!)
+                repo.saveToFavourites(data!!)
             }
         }
     }

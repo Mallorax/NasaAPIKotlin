@@ -32,12 +32,11 @@ class DetailsFragment: Fragment() {
         _binding = DetailsFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        viewModel.detailedAppIvItem.observe(this.viewLifecycleOwner, Observer { item ->
-            val data = item.data?.first()
+        viewModel.detailedAppIvItem.observe(this.viewLifecycleOwner, Observer { data ->
             if (data != null){
                 binding.descriptionText.text = data.description
                 binding.titleText.text = data.title
-                Picasso.get().load(item.imageLinks?.first()?.href).into(binding.mainImageView)
+                Picasso.get().load(data.imageThumbnail).into(binding.mainImageView)
                 if (data.favourite){
                     binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_24)
                 }else{
