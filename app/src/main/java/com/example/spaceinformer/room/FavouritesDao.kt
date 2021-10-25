@@ -19,8 +19,8 @@ interface FavouritesDao {
     suspend fun insertOrUpdateFavourite(favourite: DataEntity)
 
     @Query("SELECT * FROM data WHERE nasa_id = :id")
-    suspend fun getFavouriteWithId(id: String): DataEntity
+    suspend fun isFavourite(id: String): DataEntity?
 
     @Query("SELECT EXISTS(SELECT * FROM data WHERE nasa_id = :id)")
-    suspend fun doesDataExist(id: String):Flow<Boolean>
+    fun doesDataExist(id: String):Flow<Boolean?>
 }

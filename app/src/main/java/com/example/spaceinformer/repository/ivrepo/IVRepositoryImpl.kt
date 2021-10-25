@@ -52,9 +52,6 @@ class IVRepositoryImpl @Inject constructor(
             return RepositoryResponse.error(e.message.orEmpty())
         }
 
-
-
-       
     }
 
     override suspend fun getIVWithNasaId(id: String): RepositoryResponse<IvItem> {
@@ -68,22 +65,28 @@ class IVRepositoryImpl @Inject constructor(
         favDao.insertOrUpdateFavourite(dataEntity)
     }
 
-    override fun isFavourite(nasaId: String): Flow<Boolean> {
-        return if (favDao.doesDataExist(nasaId)){
-            val dataEntity = favDao.getFavouriteWithId(nasaId)
-            dataEntity.isFavourite
+    override suspend fun isFavourite(nasaId: String): RepositoryResponse<Boolean> {
+        val result = favDao.isFavourite(nasaId)
+        return if (result != null){
+            RepositoryResponse.success(result.isFavourite)
         }else{
-            false
+            RepositoryResponse.error("There is no such value in db")
         }
     }
 
-    override  fun getAllFavourites(): Flow<List<DataEntity>> {
+    override fun getAllFavouritesIds(): Flow<List<String>> {
         return favDao.getFavouritesDistinct()
             .filter { t ->
                 t!!.all {
                 it.isFavourite
             } }
             .map { it!!.map { t-> t.nasaId } }
+            .flowOn(Dispatchers.IO)
+
+    }
+    override fun getAllFavourites(): Flow<List<DataEntity>> {
+        return favDao.getFavouritesDistinct()
+            .filterNotNull()
             .flowOn(Dispatchers.IO)
 
     }
