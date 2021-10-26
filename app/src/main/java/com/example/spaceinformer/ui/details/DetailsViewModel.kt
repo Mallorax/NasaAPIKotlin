@@ -12,9 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel
 @Inject constructor(private val repo: IVRepositoryImpl): ViewModel() {
-
-    //TODO: For now its questionable if this viewmodel is needed
-    // or if other one could be reused for details fragment, reevaluate this later in the project
+    
     private val _detailedIvItem = MutableLiveData<DomainIvItem>()
     val detailedAppIvItem: LiveData<DomainIvItem> get() = _detailedIvItem
 
@@ -44,15 +42,17 @@ class DetailsViewModel
         }
     }
 
+    fun toggleFavourite(){
+        if (_detailedIvItem.value != null){
+            _detailedIvItem.value?.favourite = !_detailedIvItem.value?.favourite!!
+            _detailedIvItem.value = _detailedIvItem.value
+        }
+    }
 
-    fun updateFavourite(){
+
+    fun updateFavourite(data: DomainIvItem){
         viewModelScope.launch(Dispatchers.IO) {
-            val data = _detailedIvItem.value
-            if (data != null){
-                data.favourite = !data.favourite
-                _detailedIvItem.postValue(data!!)
-                repo.saveToFavourites(data!!)
-            }
+            repo.saveToFavourites(data)
         }
     }
 
