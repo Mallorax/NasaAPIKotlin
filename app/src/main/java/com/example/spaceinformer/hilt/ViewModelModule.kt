@@ -13,6 +13,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -33,6 +34,7 @@ abstract class ViewModelModule {
 
 
     @Inject
+    @Singleton
     @ViewModelScoped
     fun ivRetrofitRepository(retrofit: NasaIVEndpointService, favouritesDao: FavouritesDao): IVRepository {
         return IVRepositoryImpl(retrofit, favouritesDao)
