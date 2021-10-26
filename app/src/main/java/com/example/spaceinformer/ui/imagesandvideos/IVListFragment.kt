@@ -127,7 +127,7 @@ class IVListFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 item?.favourite = false
-                ivViewModel.saveFavourite(item)
+                ivViewModel.saveFavourite(item!!)
             }
         })
     }

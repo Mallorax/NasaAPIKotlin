@@ -34,7 +34,7 @@ fun bindPotdImage(imageView: ImageView, data: Potd?){
     if (data != null) {
         if (data.mediaType != "video") {
             imageView.visibility = View.VISIBLE
-            Picasso.get().load(data?.url).into(imageView)
+            Picasso.get().load(data.url).into(imageView)
         }else{
             imageView.visibility = View.GONE
         }

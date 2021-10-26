@@ -30,22 +30,11 @@ class IVRepositoryImpl @Inject constructor(
         val datasourceResponse = response.data?.ivDataCollection?.ivItems
         val result: List<DomainIvItem>
 
-        try {
+        return try {
             result = datasourceResponse?.map { t-> mapIvItemNetwork(t) }!!
-            getAllFavourites().collect { favs ->
-                favs.forEach { fav ->
-                    result.find { item ->
-                        item.nasaId == fav.nasaId && fav.isFavourite
-                    }.let {
-                        if (it != null){
-                            it.favourite = fav.isFavourite
-                        }
-                    }
-                }
-            }
-            return RepositoryResponse(response.status, result, response.message)
+            RepositoryResponse(response.status, result, response.message)
         }catch (e: Exception){
-            return RepositoryResponse.error(e.message.orEmpty())
+            RepositoryResponse.error(e.message.orEmpty())
         }
 
     }
