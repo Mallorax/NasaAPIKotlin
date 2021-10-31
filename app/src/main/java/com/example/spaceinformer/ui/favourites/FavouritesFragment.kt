@@ -94,6 +94,7 @@ class FavouritesFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 item.favourite = true
+                favouritesViewModel.updateFavourite(item)
             } else {
                 view.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 Snackbar.make(
@@ -103,6 +104,7 @@ class FavouritesFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 item?.favourite = false
+                favouritesViewModel.updateFavourite(item!!)
             }
         })
     }

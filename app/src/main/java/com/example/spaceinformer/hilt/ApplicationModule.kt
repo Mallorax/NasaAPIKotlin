@@ -44,8 +44,7 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun providesRoomNasaDatabase(@ApplicationContext app: Context): RoomNasaDatabase =
-        Room.databaseBuilder(app, RoomNasaDatabase::class.java, "nasa.db").build()
-
+        Room.databaseBuilder(app, RoomNasaDatabase::class.java, "nasa.db").fallbackToDestructiveMigration().build()
     @Provides
     @Singleton
     fun provideNasaDbDao(db: RoomNasaDatabase) = db.nasaDao()

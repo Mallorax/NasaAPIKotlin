@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel
 @Inject constructor(private val repo: IVRepositoryImpl): ViewModel() {
-    
+
     private val _detailedIvItem = MutableLiveData<DomainIvItem>()
     val detailedAppIvItem: LiveData<DomainIvItem> get() = _detailedIvItem
 

@@ -11,5 +11,6 @@ data class DataEntity(
     @ColumnInfo(name = "nasa_id")
     var nasaId: String,
 
+    @ColumnInfo(name = " is_favourite")
     var isFavourite: Boolean
 )

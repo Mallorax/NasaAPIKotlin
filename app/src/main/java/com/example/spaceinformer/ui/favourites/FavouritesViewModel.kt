@@ -12,11 +12,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val repoImpl: IVRepositoryImpl) : ViewModel() {
+    private val repoImpl: IVRepositoryImpl
+) : ViewModel() {
 
     //TODO: make ui react to errors
     private val _favourites = MutableLiveData<MutableList<DomainIvItem>>()
@@ -37,19 +39,19 @@ class FavouritesViewModel @Inject constructor(
     }
 
 
-    fun loadFavourites(){
+    fun loadFavourites() {
         viewModelScope.launch {
             _loadingStatus.value = true
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 repoImpl.getAllFavouritesIds().collect {
                     it.forEach { id ->
                         val item = repoImpl.getIVWithNasaId(id)
                         withContext(Dispatchers.Main) {
                             if (item.status != RepositoryResponse.Status.ERROR) {
-                                item.data.apply {
-                                    this?.favourite = true
-                                }
-                                addToFavouritesList(item.data!!)
+                                    item.data.apply {
+                                        this?.favourite = true
+                                    }
+                                updateFavouritesList(item.data!!)
                                 _favouritesLoadingError.value = false
                                 _loadingStatus.value = false
                             } else {
@@ -65,8 +67,24 @@ class FavouritesViewModel @Inject constructor(
     }
 
 
-    private fun addToFavouritesList(itemApp: DomainIvItem){
-        _favourites.value?.add(itemApp)
-        _favourites.value = _favourites.value
+    private fun updateFavouritesList(itemApp: DomainIvItem) {
+        val favList = _favourites.value
+        try {
+            favList!!.find { t ->
+                t.nasaId == itemApp.nasaId
+            }.apply {
+                this!!.favourite = itemApp.favourite
+            }
+        }catch (e: Exception){
+            favList?.add(itemApp)
+        }finally {
+            _favourites.value = favList!!
+        }
+    }
+
+    fun updateFavourite(data: DomainIvItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repoImpl.saveToFavourites(data)
+        }
     }
 }
