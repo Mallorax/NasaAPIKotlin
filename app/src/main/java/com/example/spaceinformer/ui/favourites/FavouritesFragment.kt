@@ -38,9 +38,8 @@ class FavouritesFragment : Fragment() {
 
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         favouritesViewModel.favourites.observe(viewLifecycleOwner, {
-            val count = adapter.itemCount
             adapter.submitList(it)
-            adapter.notifyItemInserted(count)
+            adapter.notifyDataSetChanged()
         })
         recycler.adapter = adapter
         return binding.root
@@ -105,6 +104,7 @@ class FavouritesFragment : Fragment() {
                 ).show()
                 item?.favourite = false
                 favouritesViewModel.updateFavourite(item!!)
+
             }
         })
     }

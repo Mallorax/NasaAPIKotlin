@@ -83,6 +83,10 @@ class FavouritesViewModel @Inject constructor(
     }
 
     fun updateFavourite(data: DomainIvItem) {
+        if (!data.favourite){
+            _favourites.value?.removeAll { t -> t.nasaId == data.nasaId }
+            _favourites.value = _favourites.value
+        }
         viewModelScope.launch(Dispatchers.IO) {
             repoImpl.saveToFavourites(data)
         }
