@@ -43,20 +43,26 @@ class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             _loadingStatus.value = true
             withContext(Dispatchers.IO) {
-                repoImpl.getAllFavouritesIds().collect {
-                    it.forEach { id ->
-                        val item = repoImpl.getIVWithNasaId(id)
-                        withContext(Dispatchers.Main) {
-                            if (item.status != RepositoryResponse.Status.ERROR) {
-                                    item.data.apply {
-                                        this?.favourite = true
-                                    }
-                                updateFavouritesList(item.data!!)
+                repoImpl.getEveryItemInFavourites().collect {
+                    it.forEach { t ->
+                        if (t.isFavourite) {
+                            val item = repoImpl.getIVWithNasaId(t.nasaId)
+                            withContext(Dispatchers.Main) {
+                                if (item.status != RepositoryResponse.Status.ERROR) {
+                                    item.data?.favourite = t.isFavourite
+                                    updateFavouritesList(item.data!!)
+                                    _favouritesLoadingError.value = false
+                                    _loadingStatus.value = false
+                                } else {
+                                    _favouritesLoadingError.value = true
+                                    _errorMessage.value = item.message!!
+                                    _loadingStatus.value = false
+                                }
+                            }
+                        }else{
+                            withContext(Dispatchers.Main){
+                                removeItemFromList(t.nasaId)
                                 _favouritesLoadingError.value = false
-                                _loadingStatus.value = false
-                            } else {
-                                _favouritesLoadingError.value = true
-                                _errorMessage.value = item.message!!
                                 _loadingStatus.value = false
                             }
                         }
@@ -69,21 +75,20 @@ class FavouritesViewModel @Inject constructor(
 
     private fun updateFavouritesList(itemApp: DomainIvItem) {
         val favList = _favourites.value
-        try {
-            favList!!.find { t ->
-                t.nasaId == itemApp.nasaId
-            }.apply {
-                this!!.favourite = itemApp.favourite
-            }
-        }catch (e: Exception){
-            favList?.add(itemApp)
-        }finally {
-            _favourites.value = favList!!
+        if (!favList!!.any {t -> t.nasaId == itemApp.nasaId  }){
+            favList.add(itemApp)
         }
+        _favourites.value = favList!!
+    }
+
+    private fun removeItemFromList(id: String){
+        val favList = _favourites.value
+        favList?.removeAll { t-> t.nasaId == id }
+        _favourites.value = favList!!
     }
 
     fun updateFavourite(data: DomainIvItem) {
-        if (!data.favourite){
+        if (!data.favourite) {
             _favourites.value?.removeAll { t -> t.nasaId == data.nasaId }
             _favourites.value = _favourites.value
         }

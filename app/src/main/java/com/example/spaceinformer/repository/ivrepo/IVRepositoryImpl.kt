@@ -44,7 +44,7 @@ class IVRepositoryImpl @Inject constructor(
         val datasourceResponse = response.data?.ivDataCollection?.ivItems
         val result = datasourceResponse?.map{
             mapIvItemNetwork(it)
-        }!!.first()
+        }?.first()
         return RepositoryResponse(response.status, result, response.message)
     }
 
@@ -72,6 +72,11 @@ class IVRepositoryImpl @Inject constructor(
             .flowOn(Dispatchers.IO)
 
     }
+
+    override fun getEveryItemInFavourites(): Flow<List<DataEntity>> {
+        return favDao.getEntireTableOfFavouritesDistinct()
+    }
+
     override fun getAllFavourites(): Flow<List<DataEntity>> {
         return favDao.getFavouritesDistinct()
             .filterNotNull()

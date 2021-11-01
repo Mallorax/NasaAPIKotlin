@@ -39,10 +39,8 @@ class DetailsFragment: Fragment() {
                 Picasso.get().load(data.imageThumbnail).into(binding.mainImageView)
                 if (data.favourite){
                     binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_24)
-                    viewModel.updateFavourite(data)
                 }else{
                     binding.favouriteImageView.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                    viewModel.updateFavourite(data)
                 }
             }
         })
@@ -63,6 +61,7 @@ class DetailsFragment: Fragment() {
 
         binding.favouriteImageView.setOnClickListener {
             viewModel.toggleFavourite()
+            viewModel.updateFavourite()
         }
 
         viewModel.getSpecificIV(args.nasaId)

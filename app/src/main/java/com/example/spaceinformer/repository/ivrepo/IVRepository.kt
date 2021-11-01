@@ -12,4 +12,5 @@ interface IVRepository {
     suspend fun isFavourite(nasaId: String): RepositoryResponse<Boolean>
     fun getAllFavourites(): Flow<List<DataEntity>>
     fun getAllFavouritesIds(): Flow<List<String>>
+    fun getEveryItemInFavourites(): Flow<List<DataEntity>>
 }

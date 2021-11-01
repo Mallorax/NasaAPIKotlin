@@ -15,6 +15,11 @@ interface FavouritesDao {
 
     fun getFavouritesDistinct() = loadFavourites().distinctUntilChanged()
 
+    @Query("SELECT * FROM data")
+    fun getEntireTableOfFavourites(): Flow<List<DataEntity>>
+
+    fun getEntireTableOfFavouritesDistinct() = getEntireTableOfFavourites().distinctUntilChanged()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateFavourite(favourite: DataEntity)
 

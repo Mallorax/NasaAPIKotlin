@@ -50,9 +50,11 @@ class DetailsViewModel
     }
 
 
-    fun updateFavourite(data: DomainIvItem){
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.saveToFavourites(data)
+    fun updateFavourite(){
+        if (detailedAppIvItem.value != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.saveToFavourites(detailedAppIvItem.value!!)
+            }
         }
     }
 
