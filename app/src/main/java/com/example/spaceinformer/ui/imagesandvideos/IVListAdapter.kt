@@ -42,6 +42,8 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
         }
         if (item.favourite){
             holderIvList.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_24)
+        }else{
+            holderIvList.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_border_24)
         }
         holderIvList.bind(item)
 

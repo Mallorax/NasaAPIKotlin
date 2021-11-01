@@ -2,6 +2,7 @@ package com.example.spaceinformer.ui.imagesandvideos
 
 import androidx.lifecycle.*
 import com.example.spaceinformer.model.appmodels.DomainIvItem
+import com.example.spaceinformer.model.entities.DataEntity
 import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
@@ -29,13 +30,28 @@ class IVViewModel
     private val _itemsLoadingError = MutableLiveData<Boolean>()
     val itemsLoadingError: LiveData<Boolean> get() = _itemsLoadingError
 
-    private var _favourites = MutableLiveData<MutableList<DomainIvItem>>()
     private var page = 1
+    private var favs = mutableListOf<DataEntity>()
 
     init {
         _ivs.value = mutableListOf<DomainIvItem>()
 
+        viewModelScope.launch(Dispatchers.IO) {
+            repoImpl.getAllFavourites().collect {
+                val currentList = _ivs.value
+                favs = it.toMutableList()
+                it.forEach {
+                        currentList!!.find { t -> t.nasaId == it.nasaId }.apply {
+                            if (this != null){
+                                this.favourite = it.isFavourite
+                            }
+                        }
+                    _ivs.postValue(currentList!!)
+                }
+            }
+        }
     }
+
 
 
     fun getIVs(year: Int) {
@@ -54,7 +70,6 @@ class IVViewModel
                 }
             }
             _loadingStatus.value = false
-            handleDbStateChanges()
         }
     }
 
@@ -66,22 +81,13 @@ class IVViewModel
     }
 
     private fun addPageOfItems(items: List<DomainIvItem>) {
+        favs.forEach{ fav ->
+            items.find { it.nasaId == fav.nasaId }.apply { this?.favourite = fav.isFavourite }
+        }
         _ivs.value?.addAll(items)
         _ivs.value = _ivs.value
     }
 
-    private suspend fun handleDbStateChanges() {
-        repoImpl.getAllFavourites().collect {
-            if (_ivs.value != null) {
-                it.forEach { fav ->
-                    _ivs.value!!.find { iv -> iv.nasaId == fav.nasaId }.apply {
-                        this?.favourite = fav.isFavourite
-                    }
-                    _ivs.value = _ivs.value
-                }
-            }
-        }
-    }
 
 
 }
