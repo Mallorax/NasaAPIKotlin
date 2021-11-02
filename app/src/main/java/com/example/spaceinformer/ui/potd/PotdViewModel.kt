@@ -1,7 +1,9 @@
 package com.example.spaceinformer.ui.potd
 
 import androidx.lifecycle.*
+import com.example.spaceinformer.model.appmodels.PictureOfTheDay
 import com.example.spaceinformer.model.nasapi.potd.Potd
+import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.potdrepo.PotdRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +15,7 @@ import javax.inject.Inject
 class PotdViewModel @Inject constructor(private val repo: PotdRepository): ViewModel() {
 
     val errorMessage = MutableLiveData<String>()
-    val potd = MutableLiveData<Potd>()
+    val potd = MutableLiveData<PictureOfTheDay>()
     val loading = MutableLiveData<Boolean>()
 
 
@@ -23,11 +25,11 @@ class PotdViewModel @Inject constructor(private val repo: PotdRepository): ViewM
             withContext(Dispatchers.IO){
                 val response = repo.getPotd()
                 withContext(Dispatchers.Main){
-                    if (response.isSuccessful){
-                        potd.postValue(response.body())
+                    if (response.status != RepositoryResponse.Status.ERROR){
+                        potd.postValue(response.data!!)
                         loading.value = false
                     }else{
-                        errorMessage.value = "Error: ${response.message()}"
+                        errorMessage.value = "Error: ${response.message}"
                         loading.value = false
                     }
                 }

@@ -14,4 +14,5 @@ data class PictureOfTheDay(
     val concepts: String,
     val thumbnailUrl: String,
     val copyright: String,
-    val serviceVersion: String)
+    val serviceVersion: String,
+    var isFavourite: Boolean = false)

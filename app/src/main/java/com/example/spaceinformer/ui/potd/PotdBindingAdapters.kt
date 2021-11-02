@@ -6,20 +6,21 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.example.spaceinformer.model.appmodels.PictureOfTheDay
 import com.example.spaceinformer.model.nasapi.potd.Potd
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("potdTitle")
-fun bindPotdTitle(textView: TextView, data: Potd?){
+fun bindPotdTitle(textView: TextView, data: PictureOfTheDay?){
     if (data != null){
         textView.text = data.title
     }
 }
 
 @BindingAdapter("potdExplanation")
-fun bindPotdExplanation(textView: TextView, data: Potd?){
+fun bindPotdExplanation(textView: TextView, data: PictureOfTheDay?){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
         textView.justificationMode = JUSTIFICATION_MODE_INTER_WORD
     }
@@ -30,7 +31,7 @@ fun bindPotdExplanation(textView: TextView, data: Potd?){
 }
 
 @BindingAdapter("potdImage")
-fun bindPotdImage(imageView: ImageView, data: Potd?){
+fun bindPotdImage(imageView: ImageView, data: PictureOfTheDay?){
     if (data != null) {
         if (data.mediaType != "video") {
             imageView.visibility = View.VISIBLE
@@ -42,7 +43,7 @@ fun bindPotdImage(imageView: ImageView, data: Potd?){
 }
 
 @BindingAdapter("potdVideo")
-fun bindPotdVideo(videoView: StyledPlayerView, data: Potd?){
+fun bindPotdVideo(videoView: StyledPlayerView, data: PictureOfTheDay?){
     if (data != null) {
         if (data.mediaType == "video") {
             videoView.visibility = View.VISIBLE

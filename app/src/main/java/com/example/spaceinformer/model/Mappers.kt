@@ -1,8 +1,10 @@
 package com.example.spaceinformer.model
 
 import com.example.spaceinformer.model.appmodels.DomainIvItem
+import com.example.spaceinformer.model.appmodels.PictureOfTheDay
 import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
+import com.example.spaceinformer.model.nasapi.potd.Potd
 
 fun mapIvItemNetwork(input: IvItem): DomainIvItem{
     return DomainIvItem(
@@ -20,4 +22,19 @@ fun mapIvItemNetwork(input: IvItem): DomainIvItem{
         input.data?.first()?.favourite == true,
         input.imageLinks?.first()?.href.orEmpty()
     )
+}
+
+fun mapPicOfTheDay(input: Potd?): PictureOfTheDay{
+    return PictureOfTheDay(input?.resource.orEmpty(),
+        input?.conceptTags.orEmpty(),
+        input?.title.orEmpty(),
+        input?.date.orEmpty(),
+        input?.url.orEmpty(),
+        input?.hdurl.orEmpty(),
+        input?.mediaType.orEmpty(),
+        input?.explanation.orEmpty(),
+        input?.concepts.orEmpty(),
+        input?.thumbnailUrl.orEmpty(),
+        input?.copyright.orEmpty(),
+        input?.serviceVersion.orEmpty())
 }
