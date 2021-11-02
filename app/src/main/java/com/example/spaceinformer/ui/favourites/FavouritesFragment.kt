@@ -14,6 +14,8 @@ import com.example.spaceinformer.databinding.IvListFragmentBinding
 import com.example.spaceinformer.ui.imagesandvideos.IVListAdapter
 import com.example.spaceinformer.ui.imagesandvideos.IVListFragmentDirections
 import com.example.spaceinformer.ui.imagesandvideos.IVViewModel
+import com.example.spaceinformer.ui.onItemFavouriteClick
+import com.example.spaceinformer.ui.onItemImageClick
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,50 +64,15 @@ class FavouritesFragment : Fragment() {
         })
     }
 
-    //TODO: This code is duplicated, get rid of that somehow
     private fun setUpRecyclerViewAdapter(): IVListAdapter {
         return IVListAdapter(IVListAdapter.OnImageClickListener { item, view ->
-            val nasaID = item?.nasaId
-            if (nasaID != null) {
-                Snackbar.make(
-                    requireContext(),
-                    view,
-                    "Navigation to details of: " + item.title,
-                    Snackbar.LENGTH_LONG
-                ).show()
-                val action = FavouritesFragmentDirections.actionFavouritesFragmentToDetailsFragment(nasaID)
+            val isNavViable = onItemImageClick(item, view)
+            if (isNavViable){
+                val action = FavouritesFragmentDirections.actionFavouritesFragmentToDetailsFragment(item!!.nasaId)
                 view.findNavController().navigate(action)
-            } else {
-                Snackbar.make(
-                    requireContext(),
-                    view,
-                    "Id of an item not found: " + item?.title,
-                    Snackbar.LENGTH_LONG
-                ).show()
             }
         }, IVListAdapter.OnFavouriteClickListener { item, view ->
-            if (item?.favourite == false) {
-                view.setImageResource(R.drawable.ic_baseline_favorite_24)
-                Snackbar.make(
-                    requireContext(),
-                    view,
-                    "Favorite: " + item.title,
-                    Snackbar.LENGTH_LONG
-                ).show()
-                item.favourite = true
-                favouritesViewModel.updateFavourite(item)
-            } else {
-                view.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                Snackbar.make(
-                    requireContext(),
-                    view,
-                    "Not favorite: " + item?.title,
-                    Snackbar.LENGTH_LONG
-                ).show()
-                item?.favourite = false
-                favouritesViewModel.updateFavourite(item!!)
-
-            }
+            favouritesViewModel.updateFavourite(onItemFavouriteClick(item, view))
         })
     }
 }
