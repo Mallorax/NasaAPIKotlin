@@ -15,4 +15,13 @@ interface NasaIVEndpointService {
 
     @GET("search")
     suspend fun getIVWithId(@Query("nasa_id")nasaId: String): Response<IVResponsePojo>
+
+
+    @GET("search")
+    suspend fun getWithFreeText(@Query("q")text: String,
+                                @Query("page")page: Int = 1,): Response<IVResponsePojo>
+
+
+
+
 }

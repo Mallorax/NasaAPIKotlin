@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_baseline_image_24"
         android:title="Potd"/>
     <item
-        android:id="@+id/IVListFragment"
+        android:id="@+id/iv_search"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_collections_24"
         android:title="Images and Videos"/>

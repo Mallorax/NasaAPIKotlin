@@ -11,7 +11,7 @@
         android:label="Picture of the day"
         tools:layout="@layout/fragment_potd"/>
     <fragment
-        android:id="@+id/IVListFragment"
+        android:id="@+id/iv_search"
         android:name="com.example.spaceinformer.ui.imagesandvideos.IVListFragment"
         android:label="Images and Videos"
         tools:layout="@layout/iv_list_fragment">

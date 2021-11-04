@@ -1,9 +1,8 @@
 package com.example.spaceinformer.ui.imagesandvideos
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -53,12 +52,16 @@ class IVListFragment : Fragment() {
                 }
             }
         })
+        setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search, menu)
     }
 
     override fun onStart() {
         super.onStart()
-
     }
 
 

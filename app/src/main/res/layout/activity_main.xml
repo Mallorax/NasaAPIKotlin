@@ -23,10 +23,11 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/app_toolbar"
                     app:layout_collapseMode="pin"
+                    android:layout_width="match_parent"
                     android:background="?attr/colorPrimary"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_width="match_parent"
-                    style="@style/CustomToolBarStyle"/>
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
                 <fragment
@@ -49,12 +50,6 @@
 
             </RelativeLayout>
 
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:fitsSystemWindows="true" />
 
 
         </androidx.drawerlayout.widget.DrawerLayout>

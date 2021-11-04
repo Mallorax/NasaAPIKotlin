@@ -2,12 +2,10 @@ package com.example.spaceinformer.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigation(){
         val bottomNavView = binding.bottomNavigationView
         bottomNavView.setupWithNavController(navController)
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.IVListFragment, R.id.favourites_fragment, R.id.potdFragment), binding.drawerLayout)
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.iv_search, R.id.favourites_fragment, R.id.potdFragment), binding.drawerLayout)
         setSupportActionBar(binding.appToolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
