@@ -19,7 +19,7 @@ interface NasaIVEndpointService {
 
     @GET("search")
     suspend fun getWithFreeText(@Query("q")text: String,
-                                @Query("page")page: Int = 1,): Response<IVResponsePojo>
+                                @Query("page")page: Int = 1): Response<IVResponsePojo>
 
 
 

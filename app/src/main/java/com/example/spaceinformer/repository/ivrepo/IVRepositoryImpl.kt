@@ -2,6 +2,7 @@ package com.example.spaceinformer.repository.ivrepo
 
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.entities.DataEntity
+import com.example.spaceinformer.model.mapIVSearchResultsToList
 import com.example.spaceinformer.model.mapIvItemNetwork
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.repository.BaseDataSource
@@ -9,7 +10,6 @@ import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.room.FavouritesDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import java.lang.Exception
 import javax.inject.Inject
 
 class IVRepositoryImpl @Inject constructor(
@@ -27,16 +27,12 @@ class IVRepositoryImpl @Inject constructor(
         val response = getResult {
             retrofit.getIVFromYear(yearString, page)
         }
-        val datasourceResponse = response.data?.ivDataCollection?.ivItems
-        val result: List<DomainIvItem>
+        return mapIVSearchResultsToList(response)
+    }
 
-        return try {
-            result = datasourceResponse?.map { t-> mapIvItemNetwork(t) }!!
-            RepositoryResponse(response.status, result, response.message)
-        }catch (e: Exception){
-            RepositoryResponse.error(e.message.orEmpty())
-        }
-
+    override suspend fun getIvsBySearch(searchWords: String, page: Int): RepositoryResponse<List<DomainIvItem>> {
+        val response = getResult { retrofit.getWithFreeText(searchWords, page) }
+        return mapIVSearchResultsToList(response)
     }
 
     override suspend fun getIVWithNasaId(id: String): RepositoryResponse<DomainIvItem> {
@@ -75,6 +71,7 @@ class IVRepositoryImpl @Inject constructor(
 
     override fun getEveryItemInFavourites(): Flow<List<DataEntity>> {
         return favDao.getEntireTableOfFavouritesDistinct()
+            .flowOn(Dispatchers.IO)
     }
 
     override fun getAllFavourites(): Flow<List<DataEntity>> {
@@ -83,5 +80,6 @@ class IVRepositoryImpl @Inject constructor(
             .flowOn(Dispatchers.IO)
 
     }
+
 
 }

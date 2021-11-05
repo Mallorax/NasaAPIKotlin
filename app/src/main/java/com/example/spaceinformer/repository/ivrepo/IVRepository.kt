@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IVRepository {
     suspend fun getIVFromYearDistinct(year: Int, page: Int = 1): RepositoryResponse<List<DomainIvItem>>
+    suspend fun getIvsBySearch(searchWords: String, page: Int = 1): RepositoryResponse<List<DomainIvItem>>
     suspend fun getIVWithNasaId(id: String): RepositoryResponse<DomainIvItem>
     suspend fun saveToFavourites(data: DomainIvItem)
     suspend fun isFavourite(nasaId: String): RepositoryResponse<Boolean>
