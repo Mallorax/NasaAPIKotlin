@@ -30,11 +30,15 @@ class IVViewModel
     private val _itemsLoadingError = MutableLiveData<Boolean>()
     val itemsLoadingError: LiveData<Boolean> get() = _itemsLoadingError
 
+    private val _searchedIVs = MutableLiveData<MutableList<DomainIvItem>>()
+    val searchedIVs: LiveData<MutableList<DomainIvItem>> get() = _searchedIVs
+
     private var page = 1
     private var favs = mutableListOf<DataEntity>()
 
     init {
-        _ivs.value = mutableListOf<DomainIvItem>()
+        _ivs.value = mutableListOf()
+        _searchedIVs.value = mutableListOf()
 
         viewModelScope.launch(Dispatchers.IO) {
             repoImpl.getAllFavourites().collect {
@@ -50,6 +54,22 @@ class IVViewModel
                 }
             }
         }
+    }
+
+    fun getIvsWithSearch(search: String){
+        _loadingStatus.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repoImpl.getIvsBySearch(search)
+            withContext(Dispatchers.Main){
+                if (response.status != RepositoryResponse.Status.ERROR && response.data != null){
+                    _itemsLoadingError.value = false
+                    _searchedIVs.value = response.data!!.toMutableList()
+                }else{
+                    _itemsLoadingError.value = true
+                }
+            }
+        }
+        _loadingStatus.value = false
     }
 
 

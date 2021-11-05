@@ -2,7 +2,8 @@ package com.example.spaceinformer.ui.imagesandvideos
 
 import android.os.Bundle
 import android.view.*
-import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -14,7 +15,6 @@ import com.example.spaceinformer.ui.onItemFavouriteClick
 import com.example.spaceinformer.ui.onItemImageClick
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.IndexOutOfBoundsException
 
 //Images & Videos
 @AndroidEntryPoint
@@ -39,7 +39,7 @@ class IVListFragment : Fragment() {
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         ivViewModel.getIVs(2021)
 
-        showListOfData(adapter)
+        showListOfData()
         handleLoading()
         showError()
 
@@ -58,6 +58,23 @@ class IVListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search, menu)
+        val searchViewItem = menu.findItem(R.id.iv_search)
+        val searchView = searchViewItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean { return true }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null && newText != "") {
+                    ivViewModel.getIvsWithSearch(newText)
+                    ivViewModel.searchedIVs.observe(this@IVListFragment.viewLifecycleOwner, {
+                        adapter.submitList(it)
+                        adapter.notifyDataSetChanged()
+                    })
+                }else{
+                    showListOfData()
+                }
+                return true
+            }
+        })
     }
 
     override fun onStart() {
@@ -65,9 +82,10 @@ class IVListFragment : Fragment() {
     }
 
 
-    private fun showListOfData(adapter: IVListAdapter) {
+    private fun showListOfData() {
         ivViewModel.ivs.observe(this.viewLifecycleOwner, { items ->
             adapter.submitList(items)
+            adapter.notifyDataSetChanged()
         })
     }
 

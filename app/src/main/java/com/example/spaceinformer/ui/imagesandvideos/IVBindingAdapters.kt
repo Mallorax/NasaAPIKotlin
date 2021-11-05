@@ -15,5 +15,8 @@ fun bindIvTitle(textView: TextView, item: DomainIvItem){
 
 @BindingAdapter("ivThumbnail")
 fun bindIvThumbnail(imageView: ImageView, item: DomainIvItem){
-    Picasso.get().load(item.imageThumbnail).into(imageView) //TODO: Size is hardcoded and thus it is good only for mobile phones (too small for tablets)
+    if (item.imageThumbnail.isNotEmpty()) {
+        Picasso.get().load(item.imageThumbnail).into(imageView)
+    }
+     //TODO: Size is hardcoded and thus it is good only for mobile phones (too small for tablets)
 }
