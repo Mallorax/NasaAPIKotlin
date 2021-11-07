@@ -10,6 +10,7 @@ import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.room.FavouritesDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import java.lang.Exception
 import javax.inject.Inject
 
 class IVRepositoryImpl @Inject constructor(
@@ -32,7 +33,19 @@ class IVRepositoryImpl @Inject constructor(
 
     override suspend fun getIvsBySearch(searchWords: String, page: Int): RepositoryResponse<List<DomainIvItem>> {
         val response = getResult { retrofit.getWithFreeText(searchWords, page) }
-        return mapIVSearchResultsToList(response)
+        val repoResponse = mapIVSearchResultsToList(response)
+        val data = repoResponse.data
+        try {
+            data?.forEach { t->
+                t.apply {
+                    if (isFavourite(this.nasaId).data == true){
+                        this.favourite = true
+                    }
+                }
+            }
+            repoResponse.data = data
+        }catch (e: Exception){e.printStackTrace()}
+        return repoResponse
     }
 
     override suspend fun getIVWithNasaId(id: String): RepositoryResponse<DomainIvItem> {

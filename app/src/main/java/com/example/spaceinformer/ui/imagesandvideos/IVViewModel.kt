@@ -63,7 +63,8 @@ class IVViewModel
             withContext(Dispatchers.Main){
                 if (response.status != RepositoryResponse.Status.ERROR && response.data != null){
                     _itemsLoadingError.value = false
-                    _searchedIVs.value = response.data!!.toMutableList()
+                    val searchedList = response.data!!.toMutableList()
+                    _searchedIVs.value = searchedList
                 }else{
                     _itemsLoadingError.value = true
                 }
@@ -71,6 +72,7 @@ class IVViewModel
         }
         _loadingStatus.value = false
     }
+
 
 
 
