@@ -27,6 +27,7 @@ abstract class ViewModelModule {
 
 
      @Inject
+     @Singleton
      @ViewModelScoped
      fun potdRetrofitRepository(retrofit: NasaPotdService): PotdRepository {
          return PotdRetrofitRepository(retrofit)

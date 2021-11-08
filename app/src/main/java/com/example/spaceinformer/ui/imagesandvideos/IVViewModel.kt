@@ -50,8 +50,9 @@ class IVViewModel
                                 this.favourite = it.isFavourite
                             }
                         }
-                    _ivs.value!!.addAll(currentList)
+
                 }
+                _ivs.value!!.addAll(currentList!!.toMutableList())
             }
         }
     }
