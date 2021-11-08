@@ -40,7 +40,6 @@ class IVListFragment : Fragment() {
         ivViewModel.getIVs(2021)
 
         showListOfData()
-        handleLoading()
         showError()
 
         recycler.adapter = adapter
@@ -93,18 +92,6 @@ class IVListFragment : Fragment() {
         ivViewModel.itemsLoadingError.observe(this.viewLifecycleOwner, {
             if (it) {
                 Snackbar.make(this.requireView(), "Error occurred", Snackbar.LENGTH_LONG).show()
-            }
-        })
-    }
-
-    private fun handleLoading() {
-        ivViewModel.loadingStatus.observe(this.viewLifecycleOwner, { isLoading ->
-            if (isLoading) {
-                binding.progressBar.visibility = View.VISIBLE
-                binding.ivListRecycler.visibility = View.GONE
-            } else {
-                binding.progressBar.visibility = View.GONE
-                binding.ivListRecycler.visibility = View.VISIBLE
             }
         })
     }

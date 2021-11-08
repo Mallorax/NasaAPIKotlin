@@ -3,7 +3,6 @@ package com.example.spaceinformer.ui.imagesandvideos
 import androidx.lifecycle.*
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.entities.DataEntity
-import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.ivrepo.IVRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,29 +35,30 @@ class IVViewModel
     private var page = 1
     private var favs = mutableListOf<DataEntity>()
 
+    private val loadingItem = DomainIvItem(mediaType = "loading")
+
     init {
         _ivs.value = mutableListOf()
         _searchedIVs.value = mutableListOf()
 
         viewModelScope.launch(Dispatchers.IO) {
             repoImpl.getAllFavourites().collect {
-                val currentList = _ivs.value
                 favs = it.toMutableList()
                 it.forEach {
-                        currentList!!.find { t -> t.nasaId == it.nasaId }.apply {
+                        _ivs.value!!.find { t -> t.nasaId == it.nasaId }.apply {
                             if (this != null){
                                 this.favourite = it.isFavourite
                             }
                         }
 
                 }
-                _ivs.value!!.addAll(currentList!!.toMutableList())
             }
         }
     }
 
     fun getIvsWithSearch(search: String){
-        _loadingStatus.value = true
+        _searchedIVs.value?.add(loadingItem)
+        _searchedIVs.value = _searchedIVs.value
         viewModelScope.launch(Dispatchers.IO) {
             val response = repoImpl.getIvsBySearch(search)
             withContext(Dispatchers.Main){
@@ -71,7 +71,8 @@ class IVViewModel
                 }
             }
         }
-        _loadingStatus.value = false
+        _searchedIVs.value?.remove(loadingItem)
+        _searchedIVs.value = _searchedIVs.value
     }
 
 
@@ -79,6 +80,8 @@ class IVViewModel
 
     fun getIVs(year: Int) {
         viewModelScope.launch {
+            _ivs.value?.add(loadingItem)
+            _ivs.value = _ivs.value
             _loadingStatus.value = true
             withContext(Dispatchers.IO) {
                 val response = repoImpl.getIVFromYearDistinct(year, page)
@@ -92,7 +95,8 @@ class IVViewModel
                     }
                 }
             }
-            _loadingStatus.value = false
+            _ivs.value?.remove(loadingItem)
+            _ivs.value = _ivs.value
         }
     }
 
@@ -108,7 +112,6 @@ class IVViewModel
             items.find { it.nasaId == fav.nasaId }.apply { this?.favourite = fav.isFavourite }
         }
         _ivs.value?.addAll(items)
-        _ivs.value = _ivs.value
     }
 
 

@@ -36,7 +36,6 @@ class FavouritesFragment : Fragment() {
 
         val adapter = setUpRecyclerViewAdapter()
         val recycler = binding.ivListRecycler
-        handleLoading()
 
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         favouritesViewModel.favourites.observe(viewLifecycleOwner, {
@@ -52,17 +51,6 @@ class FavouritesFragment : Fragment() {
         favouritesViewModel.loadFavourites()
     }
 
-    private fun handleLoading(){
-        favouritesViewModel.loadingStatus.observe(this.viewLifecycleOwner, { isLoading ->
-            if (isLoading){
-                binding.progressBar.visibility = View.VISIBLE
-                binding.ivListRecycler.visibility = View.GONE
-            }else{
-                binding.progressBar.visibility = View.GONE
-                binding.ivListRecycler.visibility = View.VISIBLE
-            }
-        })
-    }
 
     private fun setUpRecyclerViewAdapter(): IVListAdapter {
         return IVListAdapter(IVListAdapter.OnImageClickListener { item, view ->
