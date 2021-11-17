@@ -8,10 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.R
-import com.example.spaceinformer.databinding.IvImageItemBinding
-import com.example.spaceinformer.databinding.IvImageItemBindingImpl
-import com.example.spaceinformer.databinding.IvLoadingItemBinding
-import com.example.spaceinformer.databinding.IvLoadingItemBindingImpl
+import com.example.spaceinformer.databinding.*
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 
 
@@ -87,6 +84,14 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
             "video" -> 1
             "loading" -> 2
             else -> 3
+        }
+    }
+
+    class IvVideoViewHolder(val binding: IvVideoItemBinding): RecyclerView.ViewHolder(binding.root){
+
+        fun bind(domainIvItem: DomainIvItem){
+            binding.bindedItem = domainIvItem
+            binding.executePendingBindings()
         }
     }
 
