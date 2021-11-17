@@ -4,6 +4,7 @@ import com.example.spaceinformer.model.nasapi.imagesandpictures.IVResponsePojo
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface NasaIVEndpointService {
 
@@ -20,6 +21,9 @@ interface NasaIVEndpointService {
     @GET("search")
     suspend fun getWithFreeText(@Query("q")text: String,
                                 @Query("page")page: Int = 1): Response<IVResponsePojo>
+
+    @GET
+    suspend fun getMediaLinks(@Url url: String): Response<List<String>>
 
 
 
