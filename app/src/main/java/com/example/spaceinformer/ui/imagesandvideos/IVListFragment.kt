@@ -107,7 +107,7 @@ class IVListFragment : Fragment() {
         }, IVListAdapter.OnFavouriteClickListener { item, view ->
             ivViewModel.saveFavourite(onItemFavouriteClick(item, view))
 
-        })
+        }, requireContext().applicationContext)
     }
 
 }

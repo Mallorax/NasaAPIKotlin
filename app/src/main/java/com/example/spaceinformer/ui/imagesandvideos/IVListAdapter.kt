@@ -1,19 +1,24 @@
 package com.example.spaceinformer.ui.imagesandvideos
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.*
 import com.example.spaceinformer.model.appmodels.DomainIvItem
+import com.google.android.exoplayer2.Player
+import com.google.android.material.snackbar.Snackbar
 
 
 class IVListAdapter(private val onImageClickListener: OnImageClickListener,
-                    private val onFavouriteClickListener: OnFavouriteClickListener):
+                    private val onFavouriteClickListener: OnFavouriteClickListener,
+                    private val context: Context):
     ListAdapter<DomainIvItem, RecyclerView.ViewHolder>(DiffCallback) {
 
     companion object DiffCallback: DiffUtil.ItemCallback<DomainIvItem>(){
@@ -28,22 +33,16 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        when(viewType){
+        return when(viewType){
             0 -> {
                 val binding = IvImageItemBindingImpl.inflate(inflater, parent, false)
-                return IvImageViewHolder(binding)
+                IvImageViewHolder(binding)
             } 1 -> {
-                val binding = IvLoadingItemBindingImpl.inflate(inflater, parent, false)
-                return IvLoadingViewHolder(binding)
-            } 2 -> {
-                val binding = IvLoadingItemBindingImpl.inflate(inflater, parent, false)
-                return IvLoadingViewHolder(binding)
-            } 3 -> {
-                val binding = IvLoadingItemBindingImpl.inflate(inflater, parent, false)
-                return IvLoadingViewHolder(binding)
+                val binding = IvVideoItemBindingImpl.inflate(inflater, parent, false)
+                IvVideoViewHolder(binding)
             } else -> {
                 val binding = IvLoadingItemBindingImpl.inflate(inflater, parent, false)
-                return IvLoadingViewHolder(binding)
+                IvLoadingViewHolder(binding)
             }
         }
     }
@@ -65,27 +64,31 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
                 }else{
                     holder.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 }
+                holder.binding.executePendingBindings()
                 holder.bind(item)
             } 1 -> {
-
-            }2 -> {
+                val holder = holderIvImage as IvVideoViewHolder
+                holder.binding.bindedItem = item
+                holder.binding.url = item.searchForMobileVideo()
+                holder.binding.executePendingBindings()
+                holder.bind(item)
+            } else -> {
             val holder = holderIvImage as IvLoadingViewHolder
+            holder.binding.executePendingBindings()
             holder.bind(item)
             }
         }
-
-
-    }
+}
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         return when (item.mediaType){
             "image" -> 0
             "video" -> 1
-            "loading" -> 2
-            else -> 3
+            else -> 2
         }
     }
+
 
     class IvVideoViewHolder(val binding: IvVideoItemBinding): RecyclerView.ViewHolder(binding.root){
 
@@ -117,6 +120,7 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
     class OnFavouriteClickListener(val clickListener: (domainIvItem: DomainIvItem?, v: ImageView) -> Unit){
         fun onClickFavourite(domainIvItem: DomainIvItem?, view: ImageView) = clickListener(domainIvItem, view)
     }
+
 
 
 }

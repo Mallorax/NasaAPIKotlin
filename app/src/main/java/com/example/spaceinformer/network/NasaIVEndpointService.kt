@@ -12,7 +12,7 @@ interface NasaIVEndpointService {
     @GET("search")
     suspend fun getIVFromYear(@Query("year_start")year: String,
                               @Query("page")page: Int = 1,
-                              @Query("media_type")mediaType: String = "image"): Response<IVResponsePojo>
+                              @Query("media_type")mediaType: String = "video"): Response<IVResponsePojo>
 
     @GET("search")
     suspend fun getIVWithId(@Query("nasa_id")nasaId: String): Response<IVResponsePojo>

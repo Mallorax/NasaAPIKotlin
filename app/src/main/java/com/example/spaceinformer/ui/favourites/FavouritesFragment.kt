@@ -61,6 +61,6 @@ class FavouritesFragment : Fragment() {
             }
         }, IVListAdapter.OnFavouriteClickListener { item, view ->
             favouritesViewModel.updateFavourite(onItemFavouriteClick(item, view))
-        })
+        }, requireContext().applicationContext)
     }
 }
