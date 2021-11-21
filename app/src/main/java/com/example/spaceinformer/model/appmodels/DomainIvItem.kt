@@ -16,10 +16,6 @@ data class DomainIvItem(
     val imageThumbnail: String = ""
 ){
     fun searchForMobileVideo(): String?{
-        return try {
-            (mediaLinks.filter { t -> t.contains("mobile.mp4") }).first()
-        }catch (e: NoSuchElementException){
-            return null
-        }
+        return mediaLinks[4]
     }
 }

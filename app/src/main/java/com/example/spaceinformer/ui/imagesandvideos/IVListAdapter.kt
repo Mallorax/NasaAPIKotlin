@@ -12,14 +12,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.*
 import com.example.spaceinformer.model.appmodels.DomainIvItem
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 
 
 class IVListAdapter(private val onImageClickListener: OnImageClickListener,
                     private val onFavouriteClickListener: OnFavouriteClickListener,
                     private val context: Context):
     ListAdapter<DomainIvItem, RecyclerView.ViewHolder>(DiffCallback) {
+
+    private val exoPlayer: SimpleExoPlayer
+
+    init {
+        val entryPoint = EntryPointAccessors.fromApplication(context.applicationContext, AdapterEntryPoint::class.java)
+        exoPlayer = entryPoint.provideExoPlayer()
+    }
 
     companion object DiffCallback: DiffUtil.ItemCallback<DomainIvItem>(){
         override fun areItemsTheSame(oldDomainIvItem: DomainIvItem, newDomainIvItem: DomainIvItem): Boolean {
@@ -68,10 +84,9 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
                 holder.bind(item)
             } 1 -> {
                 val holder = holderIvImage as IvVideoViewHolder
-                holder.binding.bindedItem = item
-                holder.binding.url = item.searchForMobileVideo()
-                holder.binding.executePendingBindings()
-                holder.bind(item)
+                val mediaSource = createMediaSource(item)
+                exoPlayer.setMediaSource(mediaSource)
+                holder.bind(item, exoPlayer)
             } else -> {
             val holder = holderIvImage as IvLoadingViewHolder
             holder.binding.executePendingBindings()
@@ -89,12 +104,22 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
         }
     }
 
+    private fun createMediaSource(item: DomainIvItem): ProgressiveMediaSource{
+        val mediaItem = MediaItem.fromUri(item.searchForMobileVideo()!!.replace("http", "https"))
+        return ProgressiveMediaSource.
+        Factory(LocalCacheDataSourceFactory(context.applicationContext))
+            .createMediaSource(mediaItem)
+    }
+
 
     class IvVideoViewHolder(val binding: IvVideoItemBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(domainIvItem: DomainIvItem){
+        fun bind(domainIvItem: DomainIvItem, player: SimpleExoPlayer){
             binding.bindedItem = domainIvItem
+            binding.itemVideoExoplayer.player = player
             binding.executePendingBindings()
+            player.prepare()
+            player.play()
         }
     }
 
@@ -119,6 +144,15 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
     }
     class OnFavouriteClickListener(val clickListener: (domainIvItem: DomainIvItem?, v: ImageView) -> Unit){
         fun onClickFavourite(domainIvItem: DomainIvItem?, view: ImageView) = clickListener(domainIvItem, view)
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface AdapterEntryPoint {
+        @Named("SimpleCache")
+        fun provideSimpleCache(): SimpleCache
+        @Named("SimpleExoPlayer")
+        fun provideExoPlayer(): SimpleExoPlayer
     }
 
 
