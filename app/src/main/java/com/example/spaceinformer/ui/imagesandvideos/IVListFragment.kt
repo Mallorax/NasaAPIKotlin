@@ -13,8 +13,11 @@ import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
 import com.example.spaceinformer.ui.onItemFavouriteClick
 import com.example.spaceinformer.ui.onItemImageClick
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
+import javax.inject.Inject
 
 //Images & Videos
 @AndroidEntryPoint
@@ -24,6 +27,11 @@ class IVListFragment : Fragment() {
     private var _binding: IvListFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: IVListAdapter
+
+    @Inject
+    lateinit var exoPlayer: SimpleExoPlayer
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,13 +45,20 @@ class IVListFragment : Fragment() {
         val recycler = binding.ivListRecycler
 
         recycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        recycler.preserveFocusAfterLayout = true
         ivViewModel.getIVs(2021)
 
         showListOfData()
         showError()
 
         recycler.adapter = adapter
-        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        setUpRecyclerView(recycler)
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setUpRecyclerView(recyclerView: RecyclerView){
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
@@ -51,9 +66,9 @@ class IVListFragment : Fragment() {
                 }
             }
         })
-        setHasOptionsMenu(true)
-        return binding.root
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search, menu)
@@ -80,6 +95,16 @@ class IVListFragment : Fragment() {
         super.onStart()
     }
 
+    override fun onResume() {
+        super.onResume()
+        exoPlayer.prepare()
+        exoPlayer.playWhenReady = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        exoPlayer.release()
+    }
 
     private fun showListOfData() {
         ivViewModel.ivs.observe(this.viewLifecycleOwner, { items ->
@@ -107,6 +132,16 @@ class IVListFragment : Fragment() {
         }, IVListAdapter.OnFavouriteClickListener { item, view ->
             ivViewModel.saveFavourite(onItemFavouriteClick(item, view))
 
+        }, IVListAdapter.OnFocusListener { playerView, hasFocus, mediaSource ->
+            if (hasFocus){
+                exoPlayer.setMediaItem(mediaSource)
+                exoPlayer.prepare()
+                exoPlayer.playWhenReady = true
+                playerView.player = exoPlayer
+            }else{
+                exoPlayer.playWhenReady = false
+                playerView.player = null
+            }
         }, requireContext().applicationContext)
     }
 

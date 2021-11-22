@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,29 +12,16 @@ import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.*
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.cache.SimpleCache
-import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
+import com.google.android.exoplayer2.ui.StyledPlayerControlView
 
 
 class IVListAdapter(private val onImageClickListener: OnImageClickListener,
                     private val onFavouriteClickListener: OnFavouriteClickListener,
+                    private val onFocusListener: OnFocusListener,
                     private val context: Context):
     ListAdapter<DomainIvItem, RecyclerView.ViewHolder>(DiffCallback) {
 
-    private val exoPlayer: SimpleExoPlayer
-
-    init {
-        val entryPoint = EntryPointAccessors.fromApplication(context.applicationContext, AdapterEntryPoint::class.java)
-        exoPlayer = entryPoint.provideExoPlayer()
-    }
 
     companion object DiffCallback: DiffUtil.ItemCallback<DomainIvItem>(){
         override fun areItemsTheSame(oldDomainIvItem: DomainIvItem, newDomainIvItem: DomainIvItem): Boolean {
@@ -69,24 +55,10 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
         when (holderIvImage.itemViewType){
             0 -> {
                 val holder = holderIvImage as IvImageViewHolder
-                holder.binding.itemImage.setOnClickListener {
-                    onImageClickListener.onClickImage(item, holderIvImage.itemView)
-                }
-                holder.binding.favouriteImage.setOnClickListener {
-                    onFavouriteClickListener.onClickFavourite(item, holder.binding.favouriteImage)
-                }
-                if (item.favourite){
-                    holder.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_24)
-                }else{
-                    holder.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                }
-                holder.binding.executePendingBindings()
-                holder.bind(item)
+                bindImageViewHolder(holder, item)
             } 1 -> {
                 val holder = holderIvImage as IvVideoViewHolder
-                val mediaSource = createMediaSource(item)
-                exoPlayer.setMediaSource(mediaSource)
-                holder.bind(item, exoPlayer)
+                bindVideoViewHolder(holder, item)
             } else -> {
             val holder = holderIvImage as IvLoadingViewHolder
             holder.binding.executePendingBindings()
@@ -94,6 +66,38 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
             }
         }
 }
+    private fun bindVideoViewHolder(holder: IvVideoViewHolder, item: DomainIvItem){
+        holder.binding.parent.setOnFocusChangeListener { _, hasFocus ->
+            onFocusListener.onFocus(holder.binding.itemVideoExoplayer, hasFocus, MediaItem.fromUri(item.searchForMobileVideo()!!.replace("http", "https")))
+        }
+        holder.binding.parent.setOnClickListener {
+            it.requestFocus()
+        }
+        holder.bind(item)
+    }
+
+    private fun bindImageViewHolder(holder: IvImageViewHolder, item: DomainIvItem){
+        holder.binding.itemImage.setOnClickListener {
+            onImageClickListener.onClickImage(item, holder.itemView)
+        }
+        holder.binding.favouriteImage.setOnClickListener {
+            onFavouriteClickListener.onClickFavourite(item, holder.binding.favouriteImage)
+        }
+        if (item.favourite){
+            holder.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_24)
+        }else{
+            holder.binding.favouriteImage.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
+        holder.binding.executePendingBindings()
+        holder.bind(item)
+    }
+
+
+
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+    }
+
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
@@ -113,14 +117,11 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
 
 
     class IvVideoViewHolder(val binding: IvVideoItemBinding): RecyclerView.ViewHolder(binding.root){
-
-        fun bind(domainIvItem: DomainIvItem, player: SimpleExoPlayer){
+        fun bind(domainIvItem: DomainIvItem){
             binding.bindedItem = domainIvItem
-            binding.itemVideoExoplayer.player = player
             binding.executePendingBindings()
-            player.prepare()
-            player.play()
         }
+
     }
 
     class IvImageViewHolder(val binding: IvImageItemBinding) : RecyclerView.ViewHolder(binding.root){
@@ -145,15 +146,10 @@ class IVListAdapter(private val onImageClickListener: OnImageClickListener,
     class OnFavouriteClickListener(val clickListener: (domainIvItem: DomainIvItem?, v: ImageView) -> Unit){
         fun onClickFavourite(domainIvItem: DomainIvItem?, view: ImageView) = clickListener(domainIvItem, view)
     }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface AdapterEntryPoint {
-        @Named("SimpleCache")
-        fun provideSimpleCache(): SimpleCache
-        @Named("SimpleExoPlayer")
-        fun provideExoPlayer(): SimpleExoPlayer
+    class OnFocusListener(val focusListener: (playerView: StyledPlayerControlView, hasFocus: Boolean, mediaSource: MediaItem) -> Unit){
+        fun onFocus(playerView: StyledPlayerControlView, hasFocus: Boolean, mediaSource: MediaItem) = focusListener(playerView, hasFocus, mediaSource)
     }
+
 
 
 

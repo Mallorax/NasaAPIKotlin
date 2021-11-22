@@ -41,7 +41,6 @@ class ExoPlayerModule {
 
     @Provides
     @Singleton
-    @Named("SimpleExoPlayer")
     fun provideExoPlayer(@ApplicationContext context: Context,
                          renderersFactory: DefaultRenderersFactory
     ): SimpleExoPlayer {

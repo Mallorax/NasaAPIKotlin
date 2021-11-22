@@ -61,6 +61,12 @@ class FavouritesFragment : Fragment() {
             }
         }, IVListAdapter.OnFavouriteClickListener { item, view ->
             favouritesViewModel.updateFavourite(onItemFavouriteClick(item, view))
+        }, IVListAdapter.OnFocusListener { playerView, hasFocus, mediaSource ->
+            if (hasFocus){
+
+            }else{
+
+            }
         }, requireContext().applicationContext)
     }
 }
