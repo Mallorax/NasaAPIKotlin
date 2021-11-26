@@ -21,6 +21,10 @@
         </action>
     </fragment>
     <fragment
+        android:id="@+id/info_fragment"
+        android:label="@string/info"
+        android:name="com.example.spaceinformer.ui.info.InfoFragment"/>
+    <fragment
         android:id="@+id/favourites_fragment"
         android:name="com.example.spaceinformer.ui.favourites.FavouritesFragment"
         android:label="Favourites"

@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavigation(){
         val bottomNavView = binding.bottomNavigationView
+        val navDrawer = binding.navView
+        navDrawer.setupWithNavController(navController)
         bottomNavView.setupWithNavController(navController)
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.iv_search, R.id.favourites_fragment, R.id.potdFragment), binding.drawerLayout)
         setSupportActionBar(binding.appToolbar)
@@ -41,4 +43,6 @@ class MainActivity : AppCompatActivity() {
         val navController = this.findNavController(R.id.nav_host_fragment)
         return navigateUp(navController, binding.drawerLayout)
     }
+
+
 }
