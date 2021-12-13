@@ -2,8 +2,8 @@ package com.example.spaceinformer.repository.ivrepo
 
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.entities.DataEntity
+import com.example.spaceinformer.model.mapIVSearchResultsToList
 import com.example.spaceinformer.model.mapIvItemNetwork
-import com.example.spaceinformer.model.nasapi.imagesandpictures.IVResponsePojo
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.repository.BaseDataSource
 import com.example.spaceinformer.repository.RepositoryResponse
@@ -34,7 +34,6 @@ class IVRepositoryImpl @Inject constructor(
     override suspend fun getIvsBySearch(searchWords: String, page: Int): RepositoryResponse<List<DomainIvItem>> {
         val response = getResult { retrofit.getWithFreeText(searchWords, page) }
         val repoResponse = mapIVSearchResultsToList(response)
-
         val data = repoResponse.data
         try {
             data?.forEach { t->
@@ -49,12 +48,11 @@ class IVRepositoryImpl @Inject constructor(
         return repoResponse
     }
 
-
     override suspend fun getIVWithNasaId(id: String): RepositoryResponse<DomainIvItem> {
         val response = getResult { retrofit.getIVWithId(id) }
         val datasourceResponse = response.data?.ivDataCollection?.ivItems
         val result = datasourceResponse?.map{
-            mapIvItemNetwork(it, getMediaLinks(it.href!!))
+            mapIvItemNetwork(it)
         }?.first()
         return RepositoryResponse(response.status, result, response.message)
     }
@@ -94,22 +92,6 @@ class IVRepositoryImpl @Inject constructor(
             .filterNotNull()
             .flowOn(Dispatchers.IO)
 
-    }
-
-    private suspend fun  mapIVSearchResultsToList(ivResponse: RepositoryResponse<IVResponsePojo>): RepositoryResponse<List<DomainIvItem>> {
-        val dataList = ivResponse.data?.ivDataCollection?.ivItems
-        val result: List<DomainIvItem>
-
-        return try {
-            result = dataList?.map { t-> mapIvItemNetwork(t, getMediaLinks(t.href!!))}!!
-            RepositoryResponse(ivResponse.status, result, ivResponse.message)
-        }catch (e: Exception){
-            RepositoryResponse.error(e.message.orEmpty())
-        }
-    }
-
-    private suspend fun getMediaLinks(href: String): List<String>{
-        return getResult { retrofit.getMediaLinks(href) }.data!!
     }
 
 

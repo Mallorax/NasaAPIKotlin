@@ -2,16 +2,16 @@ package com.example.spaceinformer.model
 
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.appmodels.PictureOfTheDay
+import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.model.nasapi.imagesandpictures.IVResponsePojo
 import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.model.nasapi.potd.Potd
 import com.example.spaceinformer.repository.RepositoryResponse
-import retrofit2.Response
 import java.lang.Exception
 
-fun mapIvItemNetwork(input: IvItem, links: List<String>): DomainIvItem{
+fun mapIvItemNetwork(input: IvItem): DomainIvItem{
     return DomainIvItem(
-        links,
+        input.data?.first()?.mediaType.orEmpty(),
         input.data?.first()?.description.orEmpty(),
         input.data?.first()?.mediaType.orEmpty(),
         input.data?.first()?.keywords.orEmpty(),
@@ -40,4 +40,16 @@ fun mapPicOfTheDay(input: Potd?): PictureOfTheDay{
         input?.thumbnailUrl.orEmpty(),
         input?.copyright.orEmpty(),
         input?.serviceVersion.orEmpty())
+}
+
+fun mapIVSearchResultsToList(response: RepositoryResponse<IVResponsePojo>): RepositoryResponse<List<DomainIvItem>> {
+    val dataList = response.data?.ivDataCollection?.ivItems
+    val result: List<DomainIvItem>
+
+    return try {
+        result = dataList?.map { t-> mapIvItemNetwork(t) }!!
+        RepositoryResponse(response.status, result, response.message)
+    }catch (e: Exception){
+        RepositoryResponse.error(e.message.orEmpty())
+    }
 }
