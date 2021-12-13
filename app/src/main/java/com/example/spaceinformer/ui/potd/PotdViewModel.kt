@@ -2,7 +2,6 @@ package com.example.spaceinformer.ui.potd
 
 import androidx.lifecycle.*
 import com.example.spaceinformer.model.appmodels.PictureOfTheDay
-import com.example.spaceinformer.model.nasapi.potd.Potd
 import com.example.spaceinformer.repository.RepositoryResponse
 import com.example.spaceinformer.repository.potdrepo.PotdRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

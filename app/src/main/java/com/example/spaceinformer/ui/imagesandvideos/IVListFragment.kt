@@ -2,7 +2,6 @@ package com.example.spaceinformer.ui.imagesandvideos
 
 import android.os.Bundle
 import android.view.*
-import android.widget.SearchView.OnQueryTextListener
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels

@@ -1,6 +1,5 @@
 package com.example.spaceinformer.model.appmodels
 
-import com.google.gson.annotations.SerializedName
 
 data class PictureOfTheDay(
     val resource: String,
