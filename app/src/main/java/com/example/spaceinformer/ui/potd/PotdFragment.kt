@@ -7,12 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import com.example.spaceinformer.R
+import com.example.spaceinformer.databinding.PotdFragmentBinding
 
-import com.example.spaceinformer.databinding.FragmentPotdBinding
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +17,7 @@ class PotdFragment: Fragment() {
 
 
     private val  viewModel: PotdViewModel by viewModels()
-    private var _baseBinding: FragmentPotdBinding? = null
+    private var _baseBinding: PotdFragmentBinding? = null
     private val baseBinding get() = _baseBinding!!
 
     override fun onCreateView(
@@ -31,7 +27,7 @@ class PotdFragment: Fragment() {
     ): View {
         setHasOptionsMenu(true)
         //bindings
-        _baseBinding = FragmentPotdBinding.inflate(inflater)
+        _baseBinding = PotdFragmentBinding.inflate(inflater)
         baseBinding.lifecycleOwner = viewLifecycleOwner
         baseBinding.potdViewModel = viewModel
 

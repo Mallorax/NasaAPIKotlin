@@ -1,5 +1,7 @@
 package com.example.spaceinformer.ui.details
 
+import android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +34,32 @@ class DetailsFragment: Fragment() {
         _binding = DetailsFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            binding.descriptionText.justificationMode = JUSTIFICATION_MODE_INTER_WORD
+        }
+
+        observeItem()
+        observeLoading()
+        observeErrors()
+
+        setUpListener()
+
+        viewModel.getSpecificIV(args.nasaId)
+
+        return binding.root
+    }
+
+    private fun observeLoading(){
+        viewModel.loading.observe(this.viewLifecycleOwner, Observer {
+            if (it){
+                binding.progressBar.visibility = View.VISIBLE
+            }else{
+                binding.progressBar.visibility = View.GONE
+            }
+        })
+    }
+
+    private fun observeItem(){
         viewModel.detailedAppIvItem.observe(this.viewLifecycleOwner, Observer { data ->
             if (data != null){
                 binding.descriptionText.text = data.description
@@ -44,29 +72,21 @@ class DetailsFragment: Fragment() {
                 }
             }
         })
+    }
 
-        viewModel.loading.observe(this.viewLifecycleOwner, Observer {
-            if (it){
-                binding.progressBar.visibility = View.VISIBLE
-            }else{
-                binding.progressBar.visibility = View.GONE
-            }
-        })
-
+    private fun observeErrors(){
         viewModel.errorNotification.observe(this.viewLifecycleOwner, Observer {
             if (it != null){
                 Snackbar.make(this.requireView(), it, Snackbar.LENGTH_LONG).show()
             }
         })
+    }
 
+    private fun setUpListener(){
         binding.favouriteImageView.setOnClickListener {
             viewModel.toggleFavourite()
             viewModel.updateFavourite()
         }
-
-        viewModel.getSpecificIV(args.nasaId)
-
-        return binding.root
     }
 
     override fun onDestroyView() {

@@ -2,7 +2,6 @@ package com.example.spaceinformer.model
 
 import com.example.spaceinformer.model.appmodels.DomainIvItem
 import com.example.spaceinformer.model.appmodels.PictureOfTheDay
-import com.example.spaceinformer.model.nasapi.imagesandpictures.Data
 import com.example.spaceinformer.model.nasapi.imagesandpictures.IVResponsePojo
 import com.example.spaceinformer.model.nasapi.imagesandpictures.IvItem
 import com.example.spaceinformer.model.nasapi.potd.Potd

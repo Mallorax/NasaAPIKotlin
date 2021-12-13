@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.spaceinformer.network.NasaIVEndpointService
 import com.example.spaceinformer.network.NasaPotdService
-import com.example.spaceinformer.room.FavouritesDao
 import com.example.spaceinformer.room.RoomNasaDatabase
 import com.google.gson.GsonBuilder
 import dagger.Module
