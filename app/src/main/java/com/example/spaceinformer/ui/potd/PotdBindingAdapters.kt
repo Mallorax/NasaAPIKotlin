@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.spaceinformer.model.appmodels.PictureOfTheDay
-import com.example.spaceinformer.model.nasapi.potd.Potd
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.squareup.picasso.Picasso

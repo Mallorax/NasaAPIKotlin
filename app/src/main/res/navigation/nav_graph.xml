@@ -9,7 +9,7 @@
         android:id="@+id/potdFragment"
         android:name="com.example.spaceinformer.ui.potd.PotdFragment"
         android:label="Picture of the day"
-        tools:layout="@layout/fragment_potd"/>
+        tools:layout="@layout/potd_fragment"/>
     <fragment
         android:id="@+id/iv_search"
         android:name="com.example.spaceinformer.ui.imagesandvideos.IVListFragment"

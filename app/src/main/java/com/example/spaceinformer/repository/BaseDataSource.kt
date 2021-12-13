@@ -1,9 +1,7 @@
 package com.example.spaceinformer.repository
 
-import android.util.Log
 import retrofit2.Response
 import java.lang.Exception
-import javax.inject.Inject
 
 abstract class BaseDataSource {
 

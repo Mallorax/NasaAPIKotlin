@@ -8,15 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
-import com.example.spaceinformer.R
 import com.example.spaceinformer.databinding.IvListFragmentBinding
 import com.example.spaceinformer.ui.imagesandvideos.IVListAdapter
-import com.example.spaceinformer.ui.imagesandvideos.IVListFragmentDirections
-import com.example.spaceinformer.ui.imagesandvideos.IVViewModel
 import com.example.spaceinformer.ui.onItemFavouriteClick
 import com.example.spaceinformer.ui.onItemImageClick
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
