@@ -1,6 +1,6 @@
 # NasaAPIKotlin
 
-This application I've made to better understand MVVM, kotlin coroutines as well as dependency injection. 
+This application I've made in order to better understand MVVM, kotlin coroutines as well as dependency injection with Hilt. 
 I've also decided to do paging on my own without help of library, which lead to quite... awkward result.
 I've also had a plan to implement a video player, but after several days of my fight with exoplayer, I've decided to scrap this idea.
 This may result in Nasa Picture of the Day not loading properly on certian days, as it sometimes is a video instead of an image.
